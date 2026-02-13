@@ -63,6 +63,13 @@ pattern.print()
 - `glitch()` - Glitched text
 - `wave_text()` - Wavy text animation
 
+### Junctions
+- `JunctionCanvas` - Canvas that auto-merges line intersections
+- `merge_chars()` - Merge two line characters
+- `merge_all()` - Merge multiple line characters
+- `add_junctions()` - Post-process a canvas to fix junctions
+- Styles: `normal`, `heavy`, `double`, `ascii`
+
 ### Core
 - `Canvas` - 2D character canvas with layering support
 
@@ -91,6 +98,35 @@ Output:
     ▓▓▓  ▓▓▓▓▓   ▓▓▓▓▓▓▓ ▓▓▓▓▓  ▓▓▓  ▓▓▓▓▓  ▓▓▓ ▓▓▓▓▓▓▓    ▓▓▓
 ~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽
 ≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~≈∿∽~
+```
+
+### Junction Merging
+
+```python
+from glyphwork import JunctionCanvas, merge_chars
+
+# Characters merge automatically at intersections
+print(merge_chars("─", "│"))  # → "┼"
+print(merge_chars("─", "┌"))  # → "┬"
+
+# JunctionCanvas handles this automatically
+canvas = JunctionCanvas(20, 7)
+
+# Draw crossing roads - intersections merge!
+for x in range(20):
+    canvas.set(x, 3, "─")
+for y in range(7):
+    canvas.set(10, y, "│")
+
+canvas.print()
+# Output:
+#           │
+#           │
+#           │
+# ──────────┼─────────
+#           │
+#           │
+#           │
 ```
 
 ### Animation
