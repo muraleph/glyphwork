@@ -12,6 +12,7 @@ from .patterns import wave, grid, noise, interference
 from .landscape import horizon, mountains, starfield, moon, water, compose_nightscape
 from .text import rain, cascade, breathe, typewriter, glitch, wave_text
 from .core import Canvas
+from .braille import BrailleCanvas
 from .junctions import (
     JunctionCanvas, merge_chars, merge_all, add_junctions, get_directions, get_char,
     UP, DOWN, LEFT, RIGHT, STYLES
@@ -19,6 +20,7 @@ from .junctions import (
 
 __all__ = [
     "Canvas",
+    "BrailleCanvas",
     "JunctionCanvas",
     "wave", "grid", "noise", "interference",
     "horizon", "mountains", "starfield", "moon", "water", "compose_nightscape",
