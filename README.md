@@ -63,6 +63,14 @@ pattern.print()
 - `glitch()` - Glitched text
 - `wave_text()` - Wavy text animation
 
+### Dithering
+- `DitherCanvas` - Convert images/gradients to ASCII with dithering algorithms
+- `dither_gradient()` - Quick dithered gradient generation
+- `dither_image()` - Convert image files to ASCII (requires Pillow)
+- `dither_function()` - Render math functions with dithering
+- Algorithms: Floyd-Steinberg, Atkinson, Sierra, ordered (Bayer matrix)
+- Palettes: `DENSITY_CHARS`, `BLOCK_CHARS`, `BINARY_CHARS`, `SHADE_CHARS`
+
 ### Junctions
 - `JunctionCanvas` - Canvas that auto-merges line intersections
 - `merge_chars()` - Merge two line characters
@@ -127,6 +135,46 @@ canvas.print()
 #           │
 #           │
 #           │
+```
+
+### Dithered Gradients
+
+```python
+from glyphwork import DitherCanvas, BLOCK_CHARS
+
+# Create a radial gradient
+canvas = DitherCanvas(40, 16)
+canvas.fill_gradient("radial")
+
+# Render with Floyd-Steinberg dithering
+print(canvas.frame("floyd_steinberg", BLOCK_CHARS))
+```
+
+Output:
+```
+███▓▓▓▓▓▓▒▓▒▒▒▒▒▒░▒░▒░▒░▒▒▒▒▒▒▒▓▓▓▓▓▓███
+██▓█▓▓▓▓▒▓▒▒▒▒▒░░▒░░░▒░▒░▒░▒▒▒▓▒▒▓▓▓▓▓▓█
+██▓▓█▓▓▓▒▒▒▒▒▒░▒░░░▒░░░░░▒░▒▒▒▒▒▓▒▓▓▓██▓
+█▓▓▓▓▓▓▒▒▒▒░▒░░░░░░ ░░░░░░░░░▒▒▒▒▓▓▓▓▓▓█
+▓▓▓▓▓▓▒▒▒▒▒░░░░░░░   ░░░░░░░░░▒▒▒▒▓▓▓▓▓▓
+█▓▓▓▓▓▒▒▒░░░░░░░       ░░░░░░░░▒▒▒▓▓▓▓▓█
+▓▓▓▓▓▒▒▒▒░░░░░░         ░░░░░░░▒▒▒▒▓▓▓▓▓
+▓▓▓▓▓▒▒▒░░░░░░           ░░░░░░▒▒▒▒▓▓▓▓▓
+```
+
+Compare different dithering algorithms:
+
+```python
+from glyphwork import dither_gradient
+
+# Floyd-Steinberg (organic, no pattern)
+print(dither_gradient(60, 8, "horizontal", method="floyd_steinberg"))
+
+# Ordered dithering (retro crosshatch pattern)
+print(dither_gradient(60, 8, "horizontal", method="ordered"))
+
+# Atkinson (high contrast, good for line art)
+print(dither_gradient(60, 8, "horizontal", method="atkinson"))
 ```
 
 ### Animation
