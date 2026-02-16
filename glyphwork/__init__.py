@@ -22,6 +22,14 @@ from .junctions import (
     JunctionCanvas, merge_chars, merge_all, add_junctions, get_directions, get_char,
     UP, DOWN, LEFT, RIGHT, STYLES
 )
+from .animation import (
+    AnimationCanvas, Buffer, Cell, DiffRenderer,
+    Sprite, SpriteMotion, Transition, FadeTransition, WipeTransition,
+    linear, ease_in, ease_out, ease_in_out,
+    ease_in_cubic, ease_out_cubic, ease_in_out_cubic,
+    ease_out_elastic, ease_out_bounce,
+    get_easing, EASING
+)
 
 __all__ = [
     "Canvas",
@@ -36,4 +44,11 @@ __all__ = [
     "BAYER_2X2", "BAYER_4X4", "BAYER_8X8",
     "merge_chars", "merge_all", "add_junctions", "get_directions", "get_char",
     "UP", "DOWN", "LEFT", "RIGHT", "STYLES",
+    # Animation
+    "AnimationCanvas", "Buffer", "Cell", "DiffRenderer",
+    "Sprite", "SpriteMotion", "Transition", "FadeTransition", "WipeTransition",
+    "linear", "ease_in", "ease_out", "ease_in_out",
+    "ease_in_cubic", "ease_out_cubic", "ease_in_out_cubic",
+    "ease_out_elastic", "ease_out_bounce",
+    "get_easing", "EASING",
 ]
