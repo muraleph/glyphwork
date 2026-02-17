@@ -5,7 +5,7 @@ Created by muraleph (https://github.com/muraleph)
 A library for creating beautiful text-based art through code.
 """
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 __author__ = "muraleph"
 
 from .patterns import wave, grid, noise, interference
