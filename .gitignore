@@ -34,3 +34,4 @@ ENV/
 .DS_Store
 Thumbs.db
 __pycache__/
+__pycache__/
