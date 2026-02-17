@@ -44,6 +44,10 @@ from .particles import (
     FADE_SPARKLE, FADE_BLOCK, FADE_DOTS, FADE_STARS,
     FADE_FIRE, FADE_SMOKE, FADE_SNOW, FADE_RAIN, FADE_EXPLOSION,
 )
+from .composite import (
+    CompositeCanvas, Layer, BlendMode,
+    blend_chars, get_char_density, density_to_char,
+)
 
 __all__ = [
     "Canvas",
@@ -76,4 +80,7 @@ __all__ = [
     "create_fire_emitter", "create_smoke_emitter",
     "FADE_SPARKLE", "FADE_BLOCK", "FADE_DOTS", "FADE_STARS",
     "FADE_FIRE", "FADE_SMOKE", "FADE_SNOW", "FADE_RAIN", "FADE_EXPLOSION",
+    # Composite
+    "CompositeCanvas", "Layer", "BlendMode",
+    "blend_chars", "get_char_density", "density_to_char",
 ]
