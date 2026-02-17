@@ -353,6 +353,117 @@ anim.overlay_canvas(braille.to_canvas(), x=30, y=9)
 
 ---
 
+## Effect Scripts
+
+Standalone scripts for common animation patterns. Run directly or import into your projects.
+
+### 🌀 character_evolution.py
+*Dissolve and coalesce ASCII art through density transitions*
+
+Characters evolve through a density gradient (`█▓▒░· `) with organic per-character randomness. Great for intro/outro transitions.
+
+```bash
+# Dissolve art into space
+python character_evolution.py
+
+# Coalesce from nothing
+python character_evolution.py --coalesce
+
+# Customize timing
+python character_evolution.py --speed 0.05 --frames 20
+```
+
+```python
+from character_evolution import animate, render_frame
+
+# Custom art
+my_art = """
+  ╔═══════╗
+  ║ HELLO ║
+  ╚═══════╝
+"""
+animate(my_art, dissolve=True, speed=0.08, frames=15)
+
+# Single frame at 50% progress
+frame = render_frame(my_art, target=5, progress=0.5)
+```
+
+---
+
+### 💫 radial_reveal.py
+*Reveal ASCII art from center outward with easing*
+
+Precomputes distance from center for each cell, then reveals based on animated progress. Multiple easing functions for different feels.
+
+```bash
+# Default quad_out easing
+python radial_reveal.py
+
+# Different easing curves
+python radial_reveal.py elastic_out
+python radial_reveal.py cubic_out
+```
+
+```python
+from radial_reveal import radial_reveal
+
+my_art = """
+    ★ ═══════ ★
+    ║ REVEAL ║
+    ★ ═══════ ★
+"""
+radial_reveal(my_art, duration=2.0, fps=30, ease="quad_out")
+```
+
+**Available easings:** `linear`, `quad_in`, `quad_out`, `cubic_out`, `elastic_out`
+
+---
+
+### 🎪 procedural_ascii.py
+*Demoscene-inspired procedural pattern generator*
+
+Classic algorithms rendered as ASCII: plasma, interference, XOR texture, moiré, diagonal waves, and fractal noise.
+
+```bash
+# Random pattern
+python procedural_ascii.py
+
+# Specific pattern
+python procedural_ascii.py plasma
+python procedural_ascii.py moire
+python procedural_ascii.py xor
+```
+
+```python
+from procedural_ascii import generate, plasma, BLOCKS, DOTS
+
+# Generate static texture
+texture = generate(80, 24, pattern='interference', ramp=BLOCKS)
+print(texture)
+
+# Animated plasma (call with different time values)
+for t in range(100):
+    frame = generate(80, 24, pattern='plasma', time=t * 0.1)
+    # render frame...
+
+# Use pattern functions directly
+value = plasma(x=40, y=12, t=0.5, scale=0.1)  # returns 0-1
+```
+
+**Patterns:**
+| Pattern | Description |
+|---------|-------------|
+| `plasma` | Classic overlapping sine waves (animatable) |
+| `interference` | Circular ripples from center |
+| `xor` | XOR texture banding |
+| `moire` | Overlapping grid interference |
+| `diagonal` | Diagonal sine with modulo bands |
+| `fractal` | Layered multi-octave pattern |
+
+**Character ramps:** `DENSITY` (`. :-=+*#%@`), `BLOCKS` (`░▒▓█`), `DOTS` (`·•●◉`)
+
+---
+
 ## API Reference
 
 ### Core Classes
