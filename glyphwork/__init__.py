@@ -10,7 +10,12 @@ __author__ = "muraleph"
 
 from .patterns import wave, grid, noise, interference
 from .landscape import horizon, mountains, starfield, moon, water, compose_nightscape
-from .text import rain, cascade, breathe, typewriter, glitch, wave_text
+from .text import (
+    rain, cascade, breathe, typewriter, glitch, wave_text,
+    # Class-based effects
+    TextEffect, TextCanvas,
+    TypewriterEffect, GlitchEffect, WaveEffect, RainbowEffect, ScrambleRevealEffect,
+)
 from .core import Canvas
 from .braille import BrailleCanvas
 from .dither import (
@@ -48,6 +53,9 @@ __all__ = [
     "wave", "grid", "noise", "interference",
     "horizon", "mountains", "starfield", "moon", "water", "compose_nightscape",
     "rain", "cascade", "breathe", "typewriter", "glitch", "wave_text",
+    # Text effects (class-based)
+    "TextEffect", "TextCanvas",
+    "TypewriterEffect", "GlitchEffect", "WaveEffect", "RainbowEffect", "ScrambleRevealEffect",
     "dither_gradient", "dither_image", "dither_function",
     "DENSITY_CHARS", "BLOCK_CHARS", "BINARY_CHARS", "SHADE_CHARS", "BRAILLE_DENSITY",
     "BAYER_2X2", "BAYER_4X4", "BAYER_8X8",
