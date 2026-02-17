@@ -5,7 +5,7 @@ Created by muraleph (https://github.com/muraleph)
 A library for creating beautiful text-based art through code.
 """
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 __author__ = "muraleph"
 
 from .patterns import wave, grid, noise, interference
@@ -30,6 +30,15 @@ from .animation import (
     ease_out_elastic, ease_out_bounce,
     get_easing, EASING
 )
+from .particles import (
+    Particle, ParticleEmitter, ParticleCanvas,
+    RainSystem, SnowSystem,
+    create_firework_emitter, create_rain_emitter, create_snow_emitter,
+    create_explosion_emitter, create_fountain_emitter,
+    create_fire_emitter, create_smoke_emitter,
+    FADE_SPARKLE, FADE_BLOCK, FADE_DOTS, FADE_STARS,
+    FADE_FIRE, FADE_SMOKE, FADE_SNOW, FADE_RAIN, FADE_EXPLOSION,
+)
 
 __all__ = [
     "Canvas",
@@ -51,4 +60,12 @@ __all__ = [
     "ease_in_cubic", "ease_out_cubic", "ease_in_out_cubic",
     "ease_out_elastic", "ease_out_bounce",
     "get_easing", "EASING",
+    # Particles
+    "Particle", "ParticleEmitter", "ParticleCanvas",
+    "RainSystem", "SnowSystem",
+    "create_firework_emitter", "create_rain_emitter", "create_snow_emitter",
+    "create_explosion_emitter", "create_fountain_emitter",
+    "create_fire_emitter", "create_smoke_emitter",
+    "FADE_SPARKLE", "FADE_BLOCK", "FADE_DOTS", "FADE_STARS",
+    "FADE_FIRE", "FADE_SMOKE", "FADE_SNOW", "FADE_RAIN", "FADE_EXPLOSION",
 ]
