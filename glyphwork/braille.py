@@ -13,6 +13,8 @@ Dot positions and their bit values:
 
 from typing import Set, Tuple
 
+from .transforms import TransformMixin
+
 
 # Braille dot offsets: maps (dx, dy) within a 2x4 cell to bit position
 _DOT_MAP = {
@@ -30,7 +32,7 @@ _DOT_MAP = {
 _BRAILLE_BASE = 0x2800
 
 
-class BrailleCanvas:
+class BrailleCanvas(TransformMixin):
     """
     A high-resolution canvas using Unicode braille characters.
     
@@ -57,11 +59,13 @@ class BrailleCanvas:
         self.width = char_width * 2   # pixel width
         self.height = char_height * 4  # pixel height
         self._dots: Set[Tuple[int, int]] = set()
+        self._init_transform()
     
     def set(self, x: int, y: int) -> None:
         """Set a pixel (braille dot) at position (x, y)."""
-        if 0 <= x < self.width and 0 <= y < self.height:
-            self._dots.add((x, y))
+        tx, ty = self._apply_transform(x, y)
+        if 0 <= tx < self.width and 0 <= ty < self.height:
+            self._dots.add((tx, ty))
     
     def unset(self, x: int, y: int) -> None:
         """Clear a pixel at position (x, y)."""
@@ -176,3 +180,61 @@ class BrailleCanvas:
             x0, y0 = points[i]
             x1, y1 = points[(i + 1) % len(points)]
             self.line(x0, y0, x1, y1)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Demo
+# ─────────────────────────────────────────────────────────────────────────────
+
+if __name__ == "__main__":
+    import math
+    
+    print("BrailleCanvas Transform Demo")
+    print("=" * 60)
+    
+    # Create canvas
+    canvas = BrailleCanvas(40, 12)
+    
+    # Draw a non-rotated rectangle for reference
+    canvas.rect(5, 5, 10, 8)
+    
+    # Draw rotated shapes at center
+    cx, cy = 40, 24  # Center of canvas
+    
+    # Draw multiple rotated rectangles (like a pinwheel)
+    for i in range(4):
+        angle = i * (math.pi / 4)  # 0°, 45°, 90°, 135°
+        with canvas.transform():
+            canvas.translate(cx, cy)
+            canvas.rotate(angle)
+            # Draw rectangle centered at origin
+            canvas.rect(-8, -2, 16, 4)
+    
+    # Draw a circle at center for reference
+    canvas.circle(cx, cy, 3, fill=True)
+    
+    print("\nPinwheel pattern (4 rotated rectangles + center circle):")
+    print("Reference rectangle in top-left corner")
+    print()
+    canvas.print()
+    print()
+    
+    # Test that basic functionality still works
+    print("Testing basic functionality...")
+    test = BrailleCanvas(20, 5)
+    test.line(0, 0, 39, 19)
+    test.circle(20, 10, 8)
+    print("  ✓ Line and circle work")
+    
+    # Test transform isolation
+    test2 = BrailleCanvas(10, 5)
+    test2.push_matrix()
+    test2.translate(10, 10)
+    test2.set(0, 0)  # Should appear at (10, 10)
+    test2.pop_matrix()
+    test2.set(0, 0)  # Should appear at (0, 0)
+    assert (10, 10) in test2._dots, "Transform not applied"
+    assert (0, 0) in test2._dots, "Transform not restored"
+    print("  ✓ Transform push/pop works")
+    
+    print("\nAll tests passed! ✓")
