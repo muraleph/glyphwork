@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="glyphwork",
-    version="0.1.0",
+    version="0.3.0",
     author="muraleph",
     author_email="muraleph@muraleph.art",
     description="Generative ASCII art through code",
