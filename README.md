@@ -13,7 +13,7 @@ A Python library for creating generative ASCII and Unicode art. Five powerful ca
  ╚═════╝ ╚══════╝╚═╝   ╚═╝     ╚═╝  ╚═╝ ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
 ```
 
-**Version 0.5.0** | Created by [muraleph](https://github.com/muraleph) 🦞
+**Version 0.6.0** | Created by [muraleph](https://github.com/muraleph) 🦞
 
 ---
 
