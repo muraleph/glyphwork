@@ -2,7 +2,7 @@
 
 *Where pixels meet poetry* ✨
 
-A Python library for creating generative ASCII and Unicode art. Five powerful canvas types, each designed for different creative adventures—from high-resolution braille graphics to particle physics simulations, all rendered in glorious text.
+A Python library for creating generative ASCII and Unicode art. Six powerful canvas types, each designed for different creative adventures—from high-resolution braille graphics to particle physics simulations, all rendered in glorious text.
 
 ```
 ██████╗ ██╗  ██╗   ██╗██████╗ ██╗  ██╗██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗
@@ -37,7 +37,7 @@ pip install pillow  # For image-to-ASCII conversion
 
 ---
 
-## The Five Canvases
+## The Six Canvases
 
 ### 🔲 BrailleCanvas
 *High-resolution graphics using Unicode braille characters*
@@ -237,6 +237,63 @@ from glyphwork import (
     FADE_SMOKE,      # "@#%*=:-. "
     FADE_EXPLOSION,  # "#@*+=:. "
 )
+```
+
+---
+
+### 🎨 ColorCanvas
+*ANSI color support with parallel attribute grids*
+
+Add vibrant colors to your ASCII art with 16-color, 256-color palette support, and text styling. Uses a dual-grid architecture where characters and colors are independent—modify colors without touching text and vice versa.
+
+```python
+from glyphwork import ColorCanvas, COLORS_16, BOLD
+
+canvas = ColorCanvas(40, 10)
+
+# Fill background
+canvas.fill_rect(0, 0, 40, 10, " ", bg=COLORS_16["black"])
+
+# Draw colored text
+canvas.draw_text(5, 2, "Red text", fg=COLORS_16["red"])
+canvas.draw_text(5, 3, "Green bold", fg=COLORS_16["green"], style=BOLD)
+
+# Draw a box
+canvas.draw_box(2, 5, 36, 4, fg=COLORS_16["cyan"])
+
+# Render with ANSI codes
+canvas.print()
+```
+
+**Features:**
+- **Dual-grid architecture** — Character and color grids are independent
+- **16 standard colors** — Named colors via `COLORS_16` dict
+- **256-color palette** — Extended colors for gradients and detail
+- **Text styles** — `BOLD`, `DIM`, `ITALIC`, `UNDERLINE`, `BLINK`, `REVERSE`
+- **Optimized rendering** — Only emits ANSI codes when attributes change
+- **Compositing** — `copy_from()` for blitting between canvases
+
+**Color Independence:**
+```python
+# Set character only (preserves existing color)
+canvas.set_char(x, y, "█")
+
+# Set color only (preserves existing character)
+canvas.set_color(x, y, fg=COLORS_16["yellow"], bg=COLORS_16["blue"])
+
+# Set both together
+canvas.set(x, y, "★", fg=COLORS_16["bright_yellow"])
+```
+
+**256-Color Palette:**
+```python
+# Extended colors (16-255)
+for i in range(24):
+    canvas.set(i, 0, "█", fg=232 + i)  # Grayscale ramp
+
+# Color by name helper
+from glyphwork import color_by_name
+canvas.draw_text(0, 0, "Hi", fg=color_by_name("bright_blue"))
 ```
 
 ---
@@ -475,6 +532,7 @@ value = plasma(x=40, y=12, t=0.5, scale=0.1)  # returns 0-1
 | `DitherCanvas` | Image/gradient dithering to ASCII |
 | `AnimationCanvas` | Double-buffered animation with easing |
 | `ParticleCanvas` | Physics particle system |
+| `ColorCanvas` | ANSI color support with 256-color palette |
 | `TextCanvas` | Composable text effect animations |
 
 ### Supporting Classes
@@ -487,6 +545,7 @@ value = plasma(x=40, y=12, t=0.5, scale=0.1)  # returns 0-1
 | `Buffer` / `Cell` | Low-level animation buffer |
 | `DiffRenderer` | Efficient terminal diff rendering |
 | `TextEffect` | Base class for text effects |
+| `ColorAttr` | Color/style attributes for a cell |
 
 ### Utility Functions
 

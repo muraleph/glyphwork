@@ -48,6 +48,12 @@ from .composite import (
     CompositeCanvas, Layer, BlendMode,
     blend_chars, get_char_density, density_to_char,
 )
+from .color_canvas import (
+    ColorCanvas, ColorAttr,
+    ansi_color_code, color_by_name,
+    COLORS_16, RESET,
+    BOLD, DIM, ITALIC, UNDERLINE, BLINK, REVERSE,
+)
 
 __all__ = [
     "Canvas",
@@ -83,4 +89,9 @@ __all__ = [
     # Composite
     "CompositeCanvas", "Layer", "BlendMode",
     "blend_chars", "get_char_density", "density_to_char",
+    # Color
+    "ColorCanvas", "ColorAttr",
+    "ansi_color_code", "color_by_name",
+    "COLORS_16", "RESET",
+    "BOLD", "DIM", "ITALIC", "UNDERLINE", "BLINK", "REVERSE",
 ]
