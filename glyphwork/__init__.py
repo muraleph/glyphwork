@@ -54,6 +54,7 @@ from .color_canvas import (
     COLORS_16, RESET,
     BOLD, DIM, ITALIC, UNDERLINE, BLINK, REVERSE,
 )
+from .timeline import Frame, Timeline, bounce, reverse, repeat, hold_frame
 
 __all__ = [
     "Canvas",
@@ -94,5 +95,6 @@ __all__ = [
     "ansi_color_code", "color_by_name",
     "COLORS_16", "RESET",
     "BOLD", "DIM", "ITALIC", "UNDERLINE", "BLINK", "REVERSE",
+    # Timeline (frame-based animation)
+    "Frame", "Timeline", "bounce", "reverse", "repeat", "hold_frame",
 ]
-from .timeline import Frame, Timeline, bounce, reverse, repeat, hold_frame

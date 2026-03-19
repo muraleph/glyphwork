@@ -30,17 +30,19 @@ class Frame:
 
     @property
     def width(self) -> int:
+        """Width of the frame in characters."""
         return len(self.chars[0]) if self.chars else 0
 
     @property
     def height(self) -> int:
+        """Height of the frame in rows."""
         return len(self.chars)
 
     @classmethod
     def blank(
         cls, width: int, height: int, fill: str = " ", colored: bool = False
     ) -> Frame:
-        """Create a blank frame."""
+        """Create a blank frame filled with a character."""
         chars = [[fill] * width for _ in range(height)]
         colors = [[(None, None)] * width for _ in range(height)] if colored else None
         return cls(chars=chars, colors=colors)
@@ -82,12 +84,19 @@ class Frame:
                     self.colors[y][x] = None
 
     def copy_from(self, other: Frame) -> None:
-        """Copy another frame's content into this one."""
+        """Copy another frame's content into this one (up to overlapping size)."""
         for y in range(min(self.height, other.height)):
             for x in range(min(self.width, other.width)):
                 self.chars[y][x] = other.chars[y][x]
                 if self.colors and other.colors:
                     self.colors[y][x] = other.colors[y][x]
+
+    def to_string(self) -> str:
+        """Render frame as a string (newline-separated rows)."""
+        return "\n".join("".join(row) for row in self.chars)
+
+    def __str__(self) -> str:
+        return self.to_string()
 
 
 class Timeline:
@@ -100,6 +109,15 @@ class Timeline:
         fps: float = 10.0,
         colored: bool = False,
     ):
+        """
+        Create a new Timeline.
+
+        Args:
+            width: Frame width in characters
+            height: Frame height in rows
+            fps: Default frames per second for playback
+            colored: Whether frames support colors
+        """
         self.width = width
         self.height = height
         self.fps = fps
@@ -124,6 +142,7 @@ class Timeline:
 
     @property
     def frame_count(self) -> int:
+        """Number of frames in the timeline."""
         return len(self.frames)
 
     @property
@@ -132,6 +151,11 @@ class Timeline:
         if self.frames and 0 <= self.current_index < len(self.frames):
             return self.frames[self.current_index]
         return None
+
+    @property
+    def is_empty(self) -> bool:
+        """Check if timeline has no frames."""
+        return len(self.frames) == 0
 
     # --- Frame Creation ---
 
@@ -146,7 +170,11 @@ class Timeline:
         """Insert frame at index."""
         if frame is None:
             frame = Frame.blank(self.width, self.height, colored=self.colored)
+        index = max(0, min(index, len(self.frames)))
         self.frames.insert(index, frame)
+        # Adjust current index if inserting before it
+        if index <= self.current_index and self.current_index < len(self.frames) - 1:
+            self.current_index += 1
         return frame
 
     def clone_current(self) -> Optional[Frame]:
@@ -176,7 +204,7 @@ class Timeline:
     # --- Navigation ---
 
     def goto(self, index: int) -> Optional[Frame]:
-        """Go to frame by index."""
+        """Go to frame by index. Returns the frame or None if invalid."""
         if self.frames and 0 <= index < len(self.frames):
             self.current_index = index
             return self.current_frame
@@ -210,28 +238,36 @@ class Timeline:
 
     def last(self) -> Optional[Frame]:
         """Go to last frame."""
-        return self.goto(len(self.frames) - 1)
+        return self.goto(len(self.frames) - 1) if self.frames else None
 
     # --- Frame Reordering ---
 
-    def move_frame(self, from_idx: int, to_idx: int) -> None:
-        """Move frame from one position to another."""
+    def move_frame(self, from_idx: int, to_idx: int) -> bool:
+        """Move frame from one position to another. Returns True on success."""
         if from_idx == to_idx:
-            return
-        if 0 <= from_idx < len(self.frames) and 0 <= to_idx < len(self.frames):
-            frame = self.frames.pop(from_idx)
-            self.frames.insert(to_idx, frame)
-            # Update current index if affected
-            if self.current_index == from_idx:
-                self.current_index = to_idx
+            return True
+        if not (0 <= from_idx < len(self.frames) and 0 <= to_idx < len(self.frames)):
+            return False
 
-    def swap_frames(self, idx_a: int, idx_b: int) -> None:
-        """Swap two frames."""
-        if 0 <= idx_a < len(self.frames) and 0 <= idx_b < len(self.frames):
-            self.frames[idx_a], self.frames[idx_b] = (
-                self.frames[idx_b],
-                self.frames[idx_a],
-            )
+        frame = self.frames.pop(from_idx)
+        self.frames.insert(to_idx, frame)
+
+        # Update current index if affected
+        if self.current_index == from_idx:
+            self.current_index = to_idx
+        elif from_idx < self.current_index <= to_idx:
+            self.current_index -= 1
+        elif to_idx <= self.current_index < from_idx:
+            self.current_index += 1
+
+        return True
+
+    def swap_frames(self, idx_a: int, idx_b: int) -> bool:
+        """Swap two frames. Returns True on success."""
+        if not (0 <= idx_a < len(self.frames) and 0 <= idx_b < len(self.frames)):
+            return False
+        self.frames[idx_a], self.frames[idx_b] = self.frames[idx_b], self.frames[idx_a]
+        return True
 
     # --- Loop Region ---
 
@@ -289,22 +325,25 @@ class Timeline:
     def __iter__(self) -> Iterator[Frame]:
         return iter(self.frames)
 
+    def __getitem__(self, index: int) -> Frame:
+        return self.frames[index]
+
     def iter_range(
         self, start: int = None, end: int = None
     ) -> Iterator[Tuple[int, Frame]]:
         """Iterate over frame range with indices."""
         s = start if start is not None else 0
         e = end if end is not None else len(self.frames)
-        for i in range(s, e):
+        for i in range(s, min(e, len(self.frames))):
             yield (i, self.frames[i])
 
     # --- Duration ---
 
     @property
     def duration(self) -> float:
-        """Total duration in seconds."""
+        """Total duration in seconds based on fps and per-frame delays."""
         total = 0.0
-        default_delay = 1.0 / self.fps
+        default_delay = 1.0 / self.fps if self.fps > 0 else 0.1
         for frame in self.frames:
             total += frame.delay if frame.delay > 0 else default_delay
         return total
@@ -326,6 +365,11 @@ class Timeline:
         new_timeline.name = self.name
         new_timeline.author = self.author
         return new_timeline
+
+    # --- Representation ---
+
+    def __repr__(self) -> str:
+        return f"Timeline({self.width}x{self.height}, {len(self.frames)} frames, {self.fps} fps)"
 
 
 # =============================================================================
