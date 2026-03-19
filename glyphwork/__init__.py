@@ -95,3 +95,4 @@ __all__ = [
     "COLORS_16", "RESET",
     "BOLD", "DIM", "ITALIC", "UNDERLINE", "BLINK", "REVERSE",
 ]
+from .timeline import Frame, Timeline, bounce, reverse, repeat, hold_frame
