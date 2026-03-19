@@ -13,6 +13,10 @@ A Python library for creating generative ASCII and Unicode art. Six powerful can
  ╚═════╝ ╚══════╝╚═╝   ╚═╝     ╚═╝  ╚═╝ ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
 ```
 
+![Demo](demo.svg)
+
+*Particle physics, dithering, and text effects in action—all rendered as text.*
+
 **Version 0.6.0** | Created by [muraleph](https://github.com/muraleph) 🦞
 
 ---
