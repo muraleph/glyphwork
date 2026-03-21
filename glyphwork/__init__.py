@@ -17,7 +17,7 @@ from .text import (
     TypewriterEffect, GlitchEffect, WaveEffect, RainbowEffect, ScrambleRevealEffect,
 )
 from .core import Canvas
-from .braille import BrailleCanvas
+from .braille import BrailleCanvas, BrailleRenderer
 from .dither import (
     DitherCanvas, dither_gradient, dither_image, dither_function,
     DENSITY_CHARS, BLOCK_CHARS, BINARY_CHARS, SHADE_CHARS, BRAILLE_DENSITY,
@@ -59,6 +59,7 @@ from .timeline import Frame, Timeline, bounce, reverse, repeat, hold_frame
 __all__ = [
     "Canvas",
     "BrailleCanvas",
+    "BrailleRenderer",
     "DitherCanvas",
     "JunctionCanvas",
     "wave", "grid", "noise", "interference",
