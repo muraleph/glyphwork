@@ -5,26 +5,37 @@ All notable changes to glyphwork will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.0] - 2026-03-18
+## [0.6.0] - 2026-03-21
 
 ### Added
 
-- **ColorCanvas** - ANSI color support for terminal output
-  - 16-color palette with foreground/background
-  - Color attributes: BOLD, DIM, ITALIC, UNDERLINE, BLINK, REVERSE
+- **ColorCanvas** - ANSI color support with 256-color palette
+  - Dual-grid architecture (character and color grids independent)
+  - 16 standard colors via `COLORS_16` dict
+  - Extended 256-color palette for gradients
+  - Text styles: `BOLD`, `DIM`, `ITALIC`, `UNDERLINE`, `BLINK`, `REVERSE`
+  - Optimized rendering (only emits ANSI codes when attributes change)
+  - `copy_from()` for compositing between canvases
   - `color_by_name()` helper for color lookup
   - Full RGB to ANSI conversion
-- **Frame/Timeline Animation** - Frame-based animation system
-  - `Frame` class for individual animation frames with transforms
-  - `Timeline` class for sequencing and composing animations
+- **Frame/Timeline Animation** - Declarative animation system
+  - `Frame` class for keyframe-based animations
+  - `Timeline` class for sequencing and orchestration
   - Transform helpers: `bounce`, `reverse`, `repeat`, `hold_frame`
-  - Integrated with existing canvas types
-- **CI/CD** - GitHub Actions workflow for automated testing
+  - Transform integration with animation curves
+- **GitHub Actions CI** - Automated testing workflow
+  - pytest across Python 3.8, 3.9, 3.10, 3.11
+  - Runs on push and pull requests to master
+- **Test Coverage** - pytest test suite for core functionality
+- **Examples** - New demo scripts
+  - `color_demo.py` - Neon sunset showcase
+  - `timeline_demo.py` - Timeline animation demo
+  - `transform_demo.py` - 6 animated transform demos
+  - `demo.svg` - Animated hero image for README
 
 ### Changed
 
 - Improved README with color examples and demo showcase
-- Added comprehensive test suite for all modules
 
 ## [0.5.0] - 2026-02-17
 
