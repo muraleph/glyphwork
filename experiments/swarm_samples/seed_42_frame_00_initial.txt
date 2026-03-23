@@ -1,0 +1,21 @@
+Swarm Pattern - Seed 42, Frame 0 (Initial State)
+================================================
+Agents spawning from a central Gaussian distribution,
+showing the initial scattered chaos before flocking rules
+begin shaping the swarm.
+
+              ·              ··         ·         
+                       :·              ·          
+                         ·   ····   ··            
+                           ·   ·                  
+              ·    : : ·· ·      ·                
+   ·        ·       ·  · ·   ·· ·   ·      ·      
+                  ·    ··  ··  ··  ·              
+                   :  ·:·     · ·  ·· ·    ·      
+      ·   ·   · ·  :       ·  :       ·           
+               +  ···    : ·    ·· :              
+     ·         ··     ·    ·     ·   ·            
+                   · ·      ·                     
+                     · ·   ·   ·                  
+                            ·                     
+                 ·         ·                      

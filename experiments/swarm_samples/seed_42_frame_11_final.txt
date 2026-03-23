@@ -1,0 +1,22 @@
+Swarm Pattern - Seed 42, Frame 11 (Final State)
+================================================
+Stable swarm formation. Agents maintain tight proximity
+with minimal velocity - an emergent "organism" made of
+simple flocking rules. The glyph density creates an
+almost organic, cellular appearance.
+
+                     · ···:·  ·                   
+                     ·  ·   · ·                   
+                      ·   :·    ·                 
+                  ·  : ·  ·                       
+                   :    :·  ·: · ·                
+                   ··  · :                        
+                      · · ···  :  ·               
+                    · :   · :    ·                
+                   :·  ·:                         
+                  ·    ··  ·:·· ··                
+                      :· ·  ·     ··              
+                      ·   ·   ·· ·                
+                  · ·· ·  ··  :  ·                
+                   ·                              
+                     · : ·······

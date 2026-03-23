@@ -1,0 +1,21 @@
+Swarm Pattern - Seed 456, Frame 0 (Dense Start)
+================================================
+This seed creates an initially more concentrated swarm.
+The + symbol appears even at frame 0, showing the random
+Gaussian happened to place many agents near center.
+
+             ·         :            ·             
+                   ·   ·         ·                
+         ·                     ·                  
+          ·      ·::    +··  · :    ·             
+         ·                  ··  ·                 
+                       ··+· ···   ·    ·          
+                     ·        · · · ·             
+            ·· :  · · ·   · ·  · ·    :           
+            ·  ·       ::·  ·  ·       : ·        
+             ·     :     ·  ·                     
+                        · · ·  · ·                
+         ·   ·              ·         ·           
+                         ·   ···                  
+                       ·        ·                 
+                      · ·                         

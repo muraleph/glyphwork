@@ -1,0 +1,21 @@
+Swarm Pattern - Seed 123, Frame 0 (Initial Scatter)
+====================================================
+Different random seed creates a different initial 
+distribution. This seed produces wider initial scatter
+with an interesting asymmetric bias toward the lower-left.
+
+                      ·                           
+                 ·             ·                  
+    ·        ··     ·    ·      ·      ·          
+             ·                ··    ·             
+                  · ··   :  ·      ·  ··          
+                    · ···: · ··                   
+                  ··  ·· ·:·:            ·        
+         ·  ·      ··    ··     · :·      ·       
+           ·      :  :   ·: ·   ·    ·     ·      
+      ·          ·   : ·    ·  · ·          ·     
+                  ·  · ·      ·· · ·              
+                ·      ····     ··        ·       
+                 · ·        ·                     
+     ·      ··                                    
+           ·                                      

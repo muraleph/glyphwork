@@ -1,0 +1,21 @@
+Swarm Pattern - Seed 456, Frame 5 (Streaming)
+==============================================
+The swarm exhibits streaming behavior - agents forming
+elongated patterns as they flow toward the center. This
+shows the alignment rule creating "current" effects.
+
+                ·· : ··    : ·                    
+             ·   ·· ··  :     ·                   
+                            ·  ·                  
+                    ·       · ··· :               
+              ·  +   ··  ·      ·                 
+              ·  :··  · ·   · ·  ·  · ·           
+            ·       ·     ·  ·      ·             
+                              ·  ···              
+                ··   ···   ··· ··    ·            
+              · · :  ·   ··                       
+                       ·  ·    · ··  ·            
+                    · ···   ·:   ·                
+             ·     ·      ·                       
+                     ··        ·                  
+         ··          ·      ···  ·                

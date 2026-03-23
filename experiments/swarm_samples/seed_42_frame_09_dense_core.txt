@@ -1,0 +1,22 @@
+Swarm Pattern - Seed 42, Frame 9 (Dense Core)
+==============================================
+Peak density achieved. The swarm has formed a tight 
+cluster with multiple + symbols (4+ agents per cell).
+This shows the equilibrium between cohesion pulling
+agents together and separation keeping them from overlapping.
+
+                         · · +                    
+                 ·     ··   ·                     
+                   ·  ··· ·                       
+                  · ··  ·  +  :· ·                
+                      · ··  · ·                   
+                 ·     ··    ·· · ·               
+                  · ·  ··   ··                    
+                     · ··  :  · :                 
+                   · ·: ··:  ·  ·                 
+                     · ·       ·  ·               
+                ·  ··  ·   · :· ·  ·              
+                   ·     ·:                       
+                   ··   ··  · ·                   
+                      ·      ·  ··                
+                 ·  · ·  · :····  ·               

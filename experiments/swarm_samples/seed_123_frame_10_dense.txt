@@ -1,0 +1,21 @@
+Swarm Pattern - Seed 123, Frame 10 (High Density)
+==================================================
+Multiple high-density cells (+ symbols) appear as the
+swarm reaches peak compression. The double + pattern
+creates an interesting visual "eyes" effect.
+
+                  ·  ·  ··  · ·                   
+                   · · · :   ·                    
+                      ·    ·    ·                 
+                   ·  · · :                       
+               ·  ·  ···· · ····                  
+                  · · ·   · ·                     
+                   ··   ··  · ·                   
+                        ·   ·  ·:                 
+                :  :· :· : ···                    
+                   ·     ·    ··                  
+                 ·  · +     ·  + ·                
+                  ··   ··· · ·   ·                
+                ··  ·      ·  ·                   
+                  ·· ··· ·      ·                 
+                       · :·· ·                    

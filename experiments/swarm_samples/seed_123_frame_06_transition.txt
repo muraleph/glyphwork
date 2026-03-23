@@ -1,0 +1,22 @@
+Swarm Pattern - Seed 123, Frame 6 (Transition)
+===============================================
+The swarm is actively consolidating. Multiple small 
+clusters are merging into a larger formation. Notice 
+how the field is now mostly centered - the center_pull
+force gently corrects drift.
+
+                ·  ·    ·  ·    ·                 
+                  ·   · ··· ·                     
+                   ·  :       ·   ·               
+               · :         ··    ·                
+                  · ·          ·                  
+                       ···    : · ·               
+              ·  :  :·     :··   ·   ·            
+                   · ·   ·  ·       · ·           
+          ·   ·  ·   · ··   ··  :·                
+                ·     ··    ··     ·              
+               ·  · ·  ·  ·    ·   ·              
+                   ·· ·     ··  ·  ·              
+                · ·   ·   :    ·                  
+                  ·  ·   ·    ·  ·      ·         
+                  · :  : ·        ·               

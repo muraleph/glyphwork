@@ -1,0 +1,21 @@
+Swarm Pattern - Seed 456, Frame 11 (Stable)
+============================================
+The swarm has settled into a stable configuration. 
+The central mass shows high density while the outer
+agents maintain a loose halo formation.
+
+                     ··  :·  ·                    
+                  ·   ··    :                     
+                    ·  ·· ·   ·   ·               
+                   ·:    ··   ·                   
+              · ·      ·   :·   ·                 
+                 ·· · +·    ·                     
+                · ···     :  ····                 
+                 ··  · ·    ··                    
+              ·    ·    · ·  ·                    
+                     ·· : · ·  :  ·               
+               · · : :· · · :                     
+                     ·   :       ·                
+                     · ·     · ·                  
+                  ·  ·  ···   ·                   
+                    ··· · ···

@@ -1,0 +1,21 @@
+Swarm Pattern - Seed 42, Frame 7 (Clustering)
+==============================================
+Mid-simulation: cohesion and alignment rules are pulling
+the swarm together while separation prevents collapse.
+Notice the denser core (:, +) surrounded by stragglers (·).
+
+                  ·     ·· · · · ·                
+                    ··      ·    :                
+                 ·        · · ·                   
+              ·      ·   ·   ···                  
+                   · · ·  ·  ·  ·                 
+              ·     ·      ·· ·  ··               
+                     ··:·  ·       ·              
+             ·   ··        ·· ·· ·                
+                   ·     ··· ···· ·               
+                        : ·· ·    ·               
+               ·    ·:  · ··   · ·                
+               ·  ·   ·    ·  :                   
+                  ·  ·  ·· ·    ·  ·              
+                 ·         ·  · ·                 
+                     ·: :· ·  ·    ·              
