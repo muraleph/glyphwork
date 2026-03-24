@@ -1,282 +1,345 @@
 #!/usr/bin/env python3
 """
-Swarm Pattern Generator - MiroFish-inspired glyphwork experiments
+Swarm Pattern Visualizer
+=========================
 
-A minimal swarm simulation where agents exhibit flocking behavior
-and their positions map to ASCII characters, creating emergent
-typographic patterns.
+A simple boids-style swarm simulation rendered in the terminal.
 
-Concepts from MiroFish:
-- Agents as autonomous entities in a shared field
-- Emergent patterns from simple local rules
-- Position/density → glyph mapping for visual output
+Usage:
+------
+    # Static single frame (default)
+    python swarm_pattern.py
 
-Example Output (5 frames):
-```
-Frame 0:
-           ·                   ·        
-                  ···  ····  ··         
-           ·         ·   ·              
-  ·       ·    ··· ·   ·· ·       ·     
-               : · + ·   ·  :·          
-     ·  ·  · · +  ·· ·  +·    ·         
-    ·       :  ···  ·    ·: : ·         
-               ·     ··                 
-                 ··  ··  ·              
-                                        
+    # Animate in terminal (uses ANSI escape codes)
+    python swarm_pattern.py --animate
 
-Frame 1:
-            ·        · ·· ·             
-                · ··  ·   ·  ·  ·       
-             · ·  ·   ··    ·           
-            ·   ··  · ·   ···     ·     
-  ·   ·   ·    ·   :   ·  ·   :         
-        ·     :   ·  ··    ·            
-    ·     · ·  ···  · · · · · ·         
-           ·      ·   ···               
-                ·  · :    · ·           
-      ·        · ·:    · ·   ·          
+    # Animate with custom settings
+    python swarm_pattern.py --animate --frames 50 --delay 0.1
 
-Frame 2:
-                ·  · ··  ··             
-           · ··   :  ·     ·:           
-                  · ···:·       ·       
-                :          ·  ···       
-      ·    · ·     · ·   :              
-   ·     ·    ·   ·    :     ·          
-     ·  ·    · ·      ·  ·     ·        
-      ·      ·  · ··  · ·     ·         
-            ·      · ·  ·               
-              · ·· ··: :  : ··          
+    # Test mode: 10 frames, fast (for verification)
+    python swarm_pattern.py --test
 
-Frame 3:
-          ·   ·  ·· :··  · ·            
-               ·   ·  ··  ·             
-              ·      · ·   ·· ··        
-        ·       · ··   ·  ·    · ·      
-           ···     ·     +              
-       ·      ·      · ·     ·          
-       ·     · ···  ·  ·   ·   ·        
-    ·  ·            ·· ·       ·        
-             ··       ·   · ··          
-            ·  · · ·+· :· ·             
+Animation Mode:
+---------------
+The --animate flag enables terminal animation using ANSI escape codes:
+- ESC[2J    : Clear screen
+- ESC[H     : Move cursor to home (0,0)
+- ESC[?25l  : Hide cursor
+- ESC[?25h  : Show cursor
 
-Frame 4:
-         ·    · · ·: · ··· ·            
-                    ··  ·               
-         ·     ·   ·    · · ··          
-               ·     ·   ·    ·         
-         ·  ··· ·· ·  ··  ·· ·   ·      
-         ·           ···     · ·        
-               ···· ·  · · · ·          
-            ·        ·   ·      ·       
-      · ·   · ·     ·  ·   ··           
-            ·  ·· : · ··:               
-```
+This allows smooth in-place redrawing without terminal scrolling.
+
+Requirements:
+- Terminal with ANSI support (most modern terminals)
+- Python 3.6+
+
+Author: OpenClaw experiments
 """
 
-import random
+import argparse
 import math
+import random
+import sys
+import time
 from dataclasses import dataclass
 from typing import List, Tuple
 
-
-# ASCII glyphs by density (sparse → dense)
-DENSITY_GLYPHS = " ·∙•●○◦◎⊙"
-SIMPLE_GLYPHS = " ·:+#"
+# ANSI escape codes
+CLEAR_SCREEN = "\033[2J"
+CURSOR_HOME = "\033[H"
+HIDE_CURSOR = "\033[?25l"
+SHOW_CURSOR = "\033[?25h"
 
 
 @dataclass
-class Agent:
-    """A single swarm agent with position and velocity."""
+class Boid:
+    """A single agent in the swarm."""
     x: float
     y: float
-    vx: float = 0.0
-    vy: float = 0.0
-    
-    def distance_to(self, other: 'Agent') -> float:
-        return math.sqrt((self.x - other.x)**2 + (self.y - other.y)**2)
+    vx: float
+    vy: float
 
 
-class SwarmField:
-    """
-    A 2D field of swarm agents with flocking behavior.
+class Swarm:
+    """Boids-style swarm simulation."""
     
-    Rules:
-    - Cohesion: steer toward average position of neighbors
-    - Separation: avoid crowding nearby agents  
-    - Alignment: steer toward average heading of neighbors
-    """
-    
-    def __init__(
-        self,
-        width: int = 40,
-        height: int = 10,
-        num_agents: int = 75,
-        perception_radius: float = 5.0,
-        max_speed: float = 1.0,
-        cohesion_weight: float = 0.02,
-        separation_weight: float = 0.05,
-        alignment_weight: float = 0.03,
-        center_pull: float = 0.001,
-    ):
+    def __init__(self, count: int = 15, width: int = 60, height: int = 20):
         self.width = width
         self.height = height
-        self.perception_radius = perception_radius
-        self.max_speed = max_speed
-        self.cohesion_weight = cohesion_weight
-        self.separation_weight = separation_weight
-        self.alignment_weight = alignment_weight
-        self.center_pull = center_pull
+        self.boids: List[Boid] = []
         
-        # Initialize agents in a loose cluster
-        cx, cy = width / 2, height / 2
-        self.agents: List[Agent] = []
-        for _ in range(num_agents):
-            x = cx + random.gauss(0, width / 6)
-            y = cy + random.gauss(0, height / 4)
-            vx = random.gauss(0, 0.3)
-            vy = random.gauss(0, 0.3)
-            self.agents.append(Agent(x, y, vx, vy))
+        # Spawn boids randomly
+        for _ in range(count):
+            self.boids.append(Boid(
+                x=random.uniform(2, width - 2),
+                y=random.uniform(2, height - 2),
+                vx=random.uniform(-1, 1),
+                vy=random.uniform(-0.5, 0.5)
+            ))
+        
+        # Behavior weights
+        self.separation_weight = 1.5
+        self.alignment_weight = 1.0
+        self.cohesion_weight = 1.0
+        self.max_speed = 1.5
+        self.perception_radius = 8.0
     
     def step(self):
-        """Advance simulation by one timestep."""
-        # Compute new velocities based on flocking rules
-        new_velocities = []
-        
-        for agent in self.agents:
-            # Find neighbors
-            neighbors = [
-                other for other in self.agents
-                if other is not agent and agent.distance_to(other) < self.perception_radius
-            ]
+        """Advance simulation by one step."""
+        for boid in self.boids:
+            sep = self._separation(boid)
+            ali = self._alignment(boid)
+            coh = self._cohesion(boid)
             
-            dvx, dvy = 0.0, 0.0
-            
-            if neighbors:
-                # Cohesion: steer toward center of neighbors
-                avg_x = sum(n.x for n in neighbors) / len(neighbors)
-                avg_y = sum(n.y for n in neighbors) / len(neighbors)
-                dvx += (avg_x - agent.x) * self.cohesion_weight
-                dvy += (avg_y - agent.y) * self.cohesion_weight
-                
-                # Separation: avoid nearby agents
-                for neighbor in neighbors:
-                    dist = agent.distance_to(neighbor)
-                    if dist > 0 and dist < self.perception_radius / 2:
-                        factor = self.separation_weight / dist
-                        dvx -= (neighbor.x - agent.x) * factor
-                        dvy -= (neighbor.y - agent.y) * factor
-                
-                # Alignment: match neighbor velocity
-                avg_vx = sum(n.vx for n in neighbors) / len(neighbors)
-                avg_vy = sum(n.vy for n in neighbors) / len(neighbors)
-                dvx += (avg_vx - agent.vx) * self.alignment_weight
-                dvy += (avg_vy - agent.vy) * self.alignment_weight
-            
-            # Gentle pull toward center
-            cx, cy = self.width / 2, self.height / 2
-            dvx += (cx - agent.x) * self.center_pull
-            dvy += (cy - agent.y) * self.center_pull
-            
-            # Update velocity
-            nvx = agent.vx + dvx
-            nvy = agent.vy + dvy
+            # Apply forces
+            boid.vx += sep[0] * self.separation_weight
+            boid.vy += sep[1] * self.separation_weight
+            boid.vx += ali[0] * self.alignment_weight
+            boid.vy += ali[1] * self.alignment_weight
+            boid.vx += coh[0] * self.cohesion_weight
+            boid.vy += coh[1] * self.cohesion_weight
             
             # Limit speed
-            speed = math.sqrt(nvx**2 + nvy**2)
+            speed = math.sqrt(boid.vx**2 + boid.vy**2)
             if speed > self.max_speed:
-                nvx = nvx / speed * self.max_speed
-                nvy = nvy / speed * self.max_speed
+                boid.vx = (boid.vx / speed) * self.max_speed
+                boid.vy = (boid.vy / speed) * self.max_speed
             
-            new_velocities.append((nvx, nvy))
-        
-        # Apply velocities and update positions
-        for agent, (nvx, nvy) in zip(self.agents, new_velocities):
-            agent.vx = nvx
-            agent.vy = nvy
-            agent.x += nvx
-            agent.y += nvy
+            # Update position
+            boid.x += boid.vx
+            boid.y += boid.vy
             
-            # Soft boundary (bounce gently)
-            if agent.x < 0:
-                agent.x = 0
-                agent.vx *= -0.5
-            if agent.x >= self.width:
-                agent.x = self.width - 0.1
-                agent.vx *= -0.5
-            if agent.y < 0:
-                agent.y = 0
-                agent.vy *= -0.5
-            if agent.y >= self.height:
-                agent.y = self.height - 0.1
-                agent.vy *= -0.5
+            # Wrap around edges
+            boid.x = boid.x % self.width
+            boid.y = boid.y % self.height
     
-    def render(self, glyphs: str = SIMPLE_GLYPHS) -> str:
+    def _get_neighbors(self, boid: Boid) -> List[Boid]:
+        """Get boids within perception radius."""
+        neighbors = []
+        for other in self.boids:
+            if other is boid:
+                continue
+            dx = other.x - boid.x
+            dy = other.y - boid.y
+            dist = math.sqrt(dx**2 + dy**2)
+            if dist < self.perception_radius:
+                neighbors.append(other)
+        return neighbors
+    
+    def _separation(self, boid: Boid) -> Tuple[float, float]:
+        """Steer away from nearby boids."""
+        steer_x, steer_y = 0.0, 0.0
+        neighbors = self._get_neighbors(boid)
+        for other in neighbors:
+            dx = boid.x - other.x
+            dy = boid.y - other.y
+            dist = max(math.sqrt(dx**2 + dy**2), 0.1)
+            steer_x += dx / (dist * dist)
+            steer_y += dy / (dist * dist)
+        return (steer_x * 0.1, steer_y * 0.1)
+    
+    def _alignment(self, boid: Boid) -> Tuple[float, float]:
+        """Align velocity with neighbors."""
+        avg_vx, avg_vy = 0.0, 0.0
+        neighbors = self._get_neighbors(boid)
+        if not neighbors:
+            return (0.0, 0.0)
+        for other in neighbors:
+            avg_vx += other.vx
+            avg_vy += other.vy
+        avg_vx /= len(neighbors)
+        avg_vy /= len(neighbors)
+        return ((avg_vx - boid.vx) * 0.05, (avg_vy - boid.vy) * 0.05)
+    
+    def _cohesion(self, boid: Boid) -> Tuple[float, float]:
+        """Steer toward center of neighbors."""
+        center_x, center_y = 0.0, 0.0
+        neighbors = self._get_neighbors(boid)
+        if not neighbors:
+            return (0.0, 0.0)
+        for other in neighbors:
+            center_x += other.x
+            center_y += other.y
+        center_x /= len(neighbors)
+        center_y /= len(neighbors)
+        return ((center_x - boid.x) * 0.01, (center_y - boid.y) * 0.01)
+    
+    def render(self) -> str:
         """Render current state as ASCII art."""
-        # Count agents per cell
-        grid = [[0 for _ in range(self.width)] for _ in range(self.height)]
+        # Create empty grid
+        grid = [[' ' for _ in range(self.width)] for _ in range(self.height)]
         
-        for agent in self.agents:
-            gx = int(agent.x)
-            gy = int(agent.y)
-            if 0 <= gx < self.width and 0 <= gy < self.height:
-                grid[gy][gx] += 1
+        # Draw border
+        for x in range(self.width):
+            grid[0][x] = '─'
+            grid[self.height - 1][x] = '─'
+        for y in range(self.height):
+            grid[y][0] = '│'
+            grid[y][self.width - 1] = '│'
+        grid[0][0] = '┌'
+        grid[0][self.width - 1] = '┐'
+        grid[self.height - 1][0] = '└'
+        grid[self.height - 1][self.width - 1] = '┘'
         
-        # Map counts to glyphs
-        max_density = len(glyphs) - 1
-        lines = []
-        for row in grid:
-            line = ""
-            for count in row:
-                idx = min(count, max_density)
-                line += glyphs[idx]
-            lines.append(line)
+        # Place boids with direction indicators
+        symbols = {
+            'right': '→',
+            'left': '←',
+            'up': '↑',
+            'down': '↓',
+            'ur': '↗',
+            'ul': '↖',
+            'dr': '↘',
+            'dl': '↙'
+        }
         
-        return "\n".join(lines)
+        for boid in self.boids:
+            x = int(boid.x) % self.width
+            y = int(boid.y) % self.height
+            
+            # Skip border positions
+            if x <= 0 or x >= self.width - 1 or y <= 0 or y >= self.height - 1:
+                continue
+            
+            # Determine direction symbol
+            angle = math.atan2(boid.vy, boid.vx)
+            if -0.4 < angle < 0.4:
+                sym = symbols['right']
+            elif 0.4 <= angle < 1.2:
+                sym = symbols['dr']
+            elif 1.2 <= angle < 1.9:
+                sym = symbols['down']
+            elif 1.9 <= angle or angle <= -1.9:
+                sym = symbols['left']
+            elif -1.9 < angle <= -1.2:
+                sym = symbols['up']
+            elif -1.2 < angle <= -0.4:
+                sym = symbols['ur']
+            else:
+                sym = '●'
+            
+            grid[y][x] = sym
+        
+        # Convert to string
+        lines = [''.join(row) for row in grid]
+        return '\n'.join(lines)
 
 
-def run_demo(frames: int = 5, steps_per_frame: int = 3):
-    """Run the swarm and print frames."""
-    random.seed(42)  # Reproducible
+def animate(swarm: Swarm, frames: int = 100, delay: float = 0.08, quiet: bool = False):
+    """
+    Animate the swarm in-terminal using ANSI escape codes.
     
-    swarm = SwarmField(
-        width=40,
-        height=10,
-        num_agents=75,
-        perception_radius=6.0,
-        max_speed=0.8,
-        cohesion_weight=0.025,
-        separation_weight=0.04,
-        alignment_weight=0.02,
-        center_pull=0.002,
+    Args:
+        swarm: The Swarm instance to animate
+        frames: Number of frames to render
+        delay: Seconds between frames
+        quiet: If True, suppress frame counter output
+    """
+    try:
+        # Hide cursor and clear screen
+        sys.stdout.write(HIDE_CURSOR)
+        sys.stdout.write(CLEAR_SCREEN)
+        sys.stdout.flush()
+        
+        for frame in range(frames):
+            # Move cursor to home position
+            sys.stdout.write(CURSOR_HOME)
+            
+            # Render current state
+            output = swarm.render()
+            if not quiet:
+                output += f"\n\n  Frame {frame + 1}/{frames}  |  Ctrl+C to stop"
+            
+            sys.stdout.write(output)
+            sys.stdout.flush()
+            
+            # Advance simulation
+            swarm.step()
+            
+            # Wait
+            time.sleep(delay)
+        
+    except KeyboardInterrupt:
+        pass
+    finally:
+        # Show cursor again
+        sys.stdout.write(SHOW_CURSOR)
+        sys.stdout.write("\n")
+        sys.stdout.flush()
+
+
+def test_animation():
+    """Run a quick 10-frame test to verify animation works."""
+    print("Running 10-frame animation test...")
+    time.sleep(0.5)
+    
+    swarm = Swarm(count=10, width=40, height=15)
+    animate(swarm, frames=10, delay=0.15, quiet=False)
+    
+    print("\n✓ Animation test complete!")
+    return True
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Swarm pattern visualizer with terminal animation support"
+    )
+    parser.add_argument(
+        '--animate', '-a',
+        action='store_true',
+        help='Enable animation mode (uses ANSI escape codes)'
+    )
+    parser.add_argument(
+        '--frames', '-f',
+        type=int,
+        default=100,
+        help='Number of frames to animate (default: 100)'
+    )
+    parser.add_argument(
+        '--delay', '-d',
+        type=float,
+        default=0.08,
+        help='Delay between frames in seconds (default: 0.08)'
+    )
+    parser.add_argument(
+        '--boids', '-b',
+        type=int,
+        default=15,
+        help='Number of boids in the swarm (default: 15)'
+    )
+    parser.add_argument(
+        '--width', '-W',
+        type=int,
+        default=60,
+        help='Grid width (default: 60)'
+    )
+    parser.add_argument(
+        '--height', '-H',
+        type=int,
+        default=20,
+        help='Grid height (default: 20)'
+    )
+    parser.add_argument(
+        '--test', '-t',
+        action='store_true',
+        help='Run 10-frame test animation'
     )
     
-    print("Swarm Pattern Generator - MiroFish Glyphwork")
-    print("=" * 44)
+    args = parser.parse_args()
     
-    for frame in range(frames):
-        print(f"\nFrame {frame}:")
+    if args.test:
+        test_animation()
+        return
+    
+    swarm = Swarm(count=args.boids, width=args.width, height=args.height)
+    
+    if args.animate:
+        animate(swarm, frames=args.frames, delay=args.delay)
+    else:
+        # Static single frame
         print(swarm.render())
-        
-        # Advance simulation
-        for _ in range(steps_per_frame):
-            swarm.step()
+        print("\nTip: Use --animate for terminal animation")
 
 
-def generate_sequence(frames: int = 10, **kwargs) -> List[str]:
-    """Generate a sequence of frames as strings."""
-    random.seed(kwargs.pop('seed', 42))
-    swarm = SwarmField(**kwargs)
-    
-    sequence = []
-    for _ in range(frames):
-        sequence.append(swarm.render())
-        for _ in range(3):
-            swarm.step()
-    
-    return sequence
-
-
-if __name__ == "__main__":
-    run_demo()
+if __name__ == '__main__':
+    main()
