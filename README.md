@@ -81,7 +81,7 @@ from glyphwork import DitherCanvas, BLOCK_CHARS
 
 # Create a radial gradient
 canvas = DitherCanvas(60, 20)
-canvas.fill_gradient("radial", cx=0.5, cy=0.5, radius=0.8)
+canvas.fill_gradient("radial")  # Radiates from center
 
 # Render with Floyd-Steinberg dithering
 print(canvas.frame("floyd_steinberg", BLOCK_CHARS))
