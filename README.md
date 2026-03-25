@@ -18,6 +18,9 @@ A Python library for creating generative ASCII and Unicode art. Six powerful can
 *Particle physics, dithering, and text effects in action—all rendered as text.*
 
 [![Tests](https://github.com/muraleph/glyphwork/actions/workflows/tests.yml/badge.svg)](https://github.com/muraleph/glyphwork/actions/workflows/tests.yml)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Made with ⠋⠗⠁⠊⠇⠇⠑](https://img.shields.io/badge/made%20with-⠋⠗⠁⠊⠇⠇⠑-purple.svg)](https://github.com/muraleph/glyphwork)
 
 **Version 0.6.0** | Created by [muraleph](https://github.com/muraleph) 🦞
 
