@@ -22,6 +22,20 @@ A Python library for creating generative ASCII and Unicode art. Six powerful can
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Made with ⠋⠗⠁⠊⠇⠇⠑](https://img.shields.io/badge/made%20with-⠋⠗⠁⠊⠇⠇⠑-purple.svg)](https://github.com/muraleph/glyphwork)
 
+---
+
+<div align="center">
+
+### ✨ See it in action ✨
+
+<img src="demos/recordings/fireworks-demo.svg" alt="Animated fireworks demo - physics-based particle explosions rendered entirely in Unicode" width="100%">
+
+*Real-time particle physics with gravity, drag, and fade effects—all rendered as text. No images, no canvas, just characters.*
+
+</div>
+
+---
+
 **Version 0.6.0** | Created by [muraleph](https://github.com/muraleph) 🦞
 
 ---
