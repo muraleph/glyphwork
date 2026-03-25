@@ -60,6 +60,58 @@ pip install pillow  # For image-to-ASCII conversion
 
 ---
 
+## Command-Line Interface
+
+glyphwork includes a CLI for quick demos and showcases. After installation, run:
+
+```bash
+glyphwork list          # See all available demos
+glyphwork --help        # Full help
+```
+
+### Pattern Demos
+
+```bash
+glyphwork demo --pattern waves        # Sine wave density patterns
+glyphwork demo --pattern interference # Two-wave interference
+glyphwork demo --pattern all          # Run all pattern demos
+```
+
+### Art Style Demos
+
+```bash
+glyphwork art --style braille    # High-resolution braille drawing
+glyphwork art --style nightscape # Procedural landscape with stars
+glyphwork art --style dither     # Dithering algorithms showcase
+glyphwork art --style all        # Run all art demos
+```
+
+### Animations
+
+```bash
+glyphwork animate --effect rain       # Falling rain particles
+glyphwork animate --effect fireworks  # Bursting firework particles
+glyphwork animate --effect fire       # Flickering fire effect
+glyphwork animate --effect snow       # Gentle snowfall
+glyphwork animate --effect typewriter # Text typewriter effect
+glyphwork animate --effect glitch     # Glitchy text distortion
+
+# Custom duration
+glyphwork animate --effect rain --duration 10
+```
+
+### Quick Reference
+
+| Command | Description |
+|---------|-------------|
+| `glyphwork list` | List all available demos |
+| `glyphwork demo -p <pattern>` | Run pattern demos |
+| `glyphwork art -s <style>` | Run art style demos |
+| `glyphwork animate -e <effect>` | Run animations |
+| `glyphwork --version` | Show version |
+
+---
+
 ## The Six Canvases
 
 ### 🔲 BrailleCanvas
