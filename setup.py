@@ -28,4 +28,9 @@ setup(
     ],
     python_requires=">=3.8",
     keywords="ascii art generative text unicode terminal",
+    entry_points={
+        "console_scripts": [
+            "glyphwork=glyphwork.cli:main",
+        ],
+    },
 )
