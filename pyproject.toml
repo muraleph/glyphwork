@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "glyphwork"
+version = "0.6.0"
+description = "Generative ASCII art through code"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "muraleph", email = "muraleph@muraleph.art"}
+]
+requires-python = ">=3.8"
+keywords = ["ascii", "art", "generative", "text", "unicode", "terminal", "braille"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Artistic Software",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Terminals",
+]
+
+[project.optional-dependencies]
+images = ["Pillow>=9.0"]
+dev = ["pytest>=7.0", "build", "twine"]
+
+[project.urls]
+Homepage = "https://github.com/muraleph/glyphwork"
+Documentation = "https://github.com/muraleph/glyphwork#readme"
+Repository = "https://github.com/muraleph/glyphwork"
+Changelog = "https://github.com/muraleph/glyphwork/blob/master/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["glyphwork*"]
+
+[tool.setuptools.package-data]
+glyphwork = ["py.typed"]
