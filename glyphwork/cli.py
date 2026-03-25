@@ -371,10 +371,8 @@ def demo_rain_animation(width: int, height: int, duration: float = 5.0):
     time.sleep(1)
     
     canvas = ParticleCanvas(width, height)
-    emitter = create_rain_emitter()
-    emitter.x = width // 2
+    emitter = create_rain_emitter(width=width, spawn_rate=30)
     emitter.y = 0
-    emitter.spawn_rate = 30
     emitter.spread = math.pi  # Full width
     canvas.add_emitter(emitter)
     
@@ -412,10 +410,8 @@ def demo_snow_animation(width: int, height: int, duration: float = 5.0):
     time.sleep(1)
     
     canvas = ParticleCanvas(width, height)
-    emitter = create_snow_emitter()
-    emitter.x = width // 2
+    emitter = create_snow_emitter(width=width, spawn_rate=15)
     emitter.y = 0
-    emitter.spawn_rate = 15
     emitter.spread = math.pi
     canvas.add_emitter(emitter)
     
@@ -470,11 +466,12 @@ def demo_fireworks_animation(width: int, height: int, duration: float = 5.0):
             # Spawn new firework periodically
             if now >= next_firework:
                 import random
-                emitter = create_firework_emitter()
-                emitter.x = random.randint(width // 4, 3 * width // 4)
-                emitter.y = random.randint(height // 3, 2 * height // 3)
-                emitter.burst_count = random.randint(20, 40)
-                canvas.add_emitter(emitter)
+                x = random.randint(width // 4, 3 * width // 4)
+                y = random.randint(height // 3, 2 * height // 3)
+                emitter = create_firework_emitter(x=x, y=y)
+                burst_count = random.randint(20, 40)
+                # Burst immediately (spawn_rate=0 for fireworks)
+                canvas.add_particles(emitter.burst(burst_count))
                 next_firework = now + random.uniform(0.5, 1.5)
             
             canvas.update(dt)
@@ -499,9 +496,7 @@ def demo_fire_animation(width: int, height: int, duration: float = 5.0):
     time.sleep(1)
     
     canvas = ParticleCanvas(width, height, gravity=-5.0)  # Negative = upward
-    emitter = create_fire_emitter()
-    emitter.x = width // 2
-    emitter.y = height - 2
+    emitter = create_fire_emitter(x=width // 2, y=height - 2)
     emitter.spawn_rate = 40
     canvas.add_emitter(emitter)
     

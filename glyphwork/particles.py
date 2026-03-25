@@ -360,6 +360,25 @@ class ParticleCanvas(AnimationCanvas):
                 if char.strip():  # Don't draw spaces
                     self.set(x, y, char)
     
+    def update(self, dt: Optional[float] = None) -> None:
+        """Update physics and prepare frame for rendering.
+        
+        Convenience method that clears, updates particles, and renders.
+        
+        Args:
+            dt: Delta time in seconds (uses frame_time if None)
+        """
+        self.clear()
+        self.update_particles(dt)
+        self.render_particles()
+    
+    def frame(self) -> str:
+        """Return current frame as string for display.
+        
+        Returns the back buffer rendered to a string.
+        """
+        return self.back.render()
+    
     # -------------------------------------------------------------------------
     # Effect Helpers
     # -------------------------------------------------------------------------
