@@ -414,6 +414,137 @@ canvas = wave_text("Wavy!", 80, 24, frame=0, amplitude=2)
 
 ---
 
+### 📦 Box Drawing & Tables
+*Switchable line styles for diagrams and layouts*
+
+Eight preset character styles for drawing boxes, tables, and diagrams. Switch visual themes without changing your drawing logic—just swap the style.
+
+```python
+from glyphwork import box_drawing, table, ROUNDED, DOUBLE, ASCII
+
+# Draw a box with rounded corners
+print(box_drawing(20, 5, style="rounded"))
+```
+
+**Output:**
+```
+╭──────────────────╮
+│                  │
+│                  │
+│                  │
+╰──────────────────╯
+```
+
+**All 8 Preset Styles:**
+
+| Style | Name | Corners | Lines | Best For |
+|-------|------|---------|-------|----------|
+| `ASCII` | ascii | `+` `+` | `-` `\|` | Universal compatibility |
+| `UNICODE_LIGHT` | light | `┌` `┐` | `─` `│` | Standard diagrams |
+| `UNICODE_HEAVY` | heavy | `┏` `┓` | `━` `┃` | Bold emphasis |
+| `DOUBLE` | double | `╔` `╗` | `═` `║` | Classic fancy borders |
+| `ROUNDED` | rounded | `╭` `╮` | `─` `│` | Modern, softer look |
+| `DASHED` | dashed | `┌` `┐` | `╌` `╎` | Draft/tentative elements |
+| `BLOCK` | block | `█` `█` | `▀` `█` | Heavy solid borders |
+| `DOT` | dot | `·` `·` | `·` `·` | Minimalist, subtle |
+
+**Visual Comparison:**
+
+```
+ASCII:        LIGHT:        HEAVY:        DOUBLE:
++------+      ┌──────┐      ┏━━━━━━┓      ╔══════╗
+|      |      │      │      ┃      ┃      ║      ║
++------+      └──────┘      ┗━━━━━━┛      ╚══════╝
+
+ROUNDED:      DASHED:       BLOCK:        DOT:
+╭──────╮      ┌╌╌╌╌╌╌┐      ████████      ········
+│      │      ╎      ╎      █      █      ·      ·
+╰──────╯      └╌╌╌╌╌╌┘      ████████      ········
+```
+
+**Drawing Tables:**
+
+```python
+from glyphwork import table
+
+data = [
+    ["Name", "Role", "Level"],
+    ["Alice", "Mage", "42"],
+    ["Bob", "Knight", "38"],
+]
+
+print(table(data, style="light"))
+```
+
+**Output:**
+```
+┌───────┬────────┬───────┐
+│ Name  │  Role  │ Level │
+├───────┼────────┼───────┤
+│ Alice │  Mage  │  42   │
+│  Bob  │ Knight │  38   │
+└───────┴────────┴───────┘
+```
+
+**Using LineStyle Objects:**
+
+```python
+from glyphwork import LineStyle, UNICODE_HEAVY, get_style
+
+# Access style characters directly
+style = UNICODE_HEAVY
+print(f"{style.top_left}{style.horizontal * 10}{style.top_right}")
+# ┏━━━━━━━━━━┓
+
+# Named properties for clarity
+print(style.crossing)     # ╋
+print(style.tee_down)     # ┳
+print(style.arrow_right)  # ▶
+
+# Short aliases
+print(style.h)   # horizontal (━)
+print(style.v)   # vertical (┃)
+print(style.tl)  # top_left (┏)
+```
+
+**Create Custom Styles:**
+
+```python
+from glyphwork import create_style
+
+# Mix and match characters
+FANCY = create_style(
+    name="fancy",
+    horizontal="═",
+    vertical="│",
+    top_left="╒",
+    top_right="╕",
+    bottom_left="╘",
+    bottom_right="╛",
+)
+
+print(box_drawing(15, 3, style=FANCY))
+# ╒═════════════╕
+# │             │
+# ╘═════════════╛
+```
+
+**Line Utilities:**
+
+```python
+from glyphwork import horizontal_line, vertical_line
+
+# Simple lines
+print(horizontal_line(20, style="light"))
+# ────────────────────
+
+# With arrows
+print(horizontal_line(20, style="heavy", arrows=True))
+# ◀━━━━━━━━━━━━━━━━━━▶
+```
+
+---
+
 ## Generative Patterns
 
 Beyond the six canvases, glyphwork includes powerful generative systems based on mathematical rules. These create complex, beautiful patterns from surprisingly simple algorithms.
@@ -908,6 +1039,7 @@ rd.animate(steps=2000, frame_skip=10, delay=0.05)
 | `TextCanvas` | Composable text effect animations |
 | `CellularAutomaton` | Conway's Game of Life and variants |
 | `LangtonsAnt` | 2D Turing machine with emergent behavior |
+| `LineStyle` | Box drawing character set with 8 presets |
 
 ### Supporting Classes
 
@@ -944,6 +1076,11 @@ from glyphwork import cellular_automata, life_pattern, elementary_automaton
 
 # Langton's Ant
 from glyphwork import langtons_ant, LANGTON_RULES
+
+# Box Drawing & Tables
+from glyphwork import box_drawing, table, horizontal_line, vertical_line
+from glyphwork import LineStyle, get_style, create_style
+from glyphwork import ASCII, UNICODE_LIGHT, UNICODE_HEAVY, DOUBLE, ROUNDED, DASHED, BLOCK, DOT
 ```
 
 ---
