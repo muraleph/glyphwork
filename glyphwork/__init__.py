@@ -72,6 +72,14 @@ from .reaction_diffusion import (
     DENSITY_CHARS as RD_DENSITY_CHARS,
     BLOCK_CHARS as RD_BLOCK_CHARS,
 )
+from .line_styles import (
+    LineStyle,
+    ASCII, UNICODE_LIGHT, LIGHT, UNICODE_HEAVY, HEAVY,
+    DOUBLE, ROUNDED, DASHED, BLOCK, DOT,
+    STYLES as LINE_STYLES, DEFAULT_STYLE,
+    get_style, create_style,
+    box_drawing, horizontal_line, vertical_line, table_row, table,
+)
 
 __all__ = [
     "Canvas",
@@ -125,4 +133,11 @@ __all__ = [
     "ReactionDiffusion", "RD", "reaction_diffusion", "list_presets",
     "PRESETS", "RD_ORGANIC_CHARS", "RD_DENSITY_CHARS", "RD_BLOCK_CHARS",
     "BINARY_CHARS", "SOFT_CHARS",
+    # Line Styles
+    "LineStyle",
+    "ASCII", "UNICODE_LIGHT", "LIGHT", "UNICODE_HEAVY", "HEAVY",
+    "DOUBLE", "ROUNDED", "DASHED", "BLOCK", "DOT",
+    "LINE_STYLES", "DEFAULT_STYLE",
+    "get_style", "create_style",
+    "box_drawing", "horizontal_line", "vertical_line", "table_row", "table",
 ]
