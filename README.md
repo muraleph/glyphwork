@@ -801,6 +801,98 @@ value = plasma(x=40, y=12, t=0.5, scale=0.1)  # returns 0-1
 
 ---
 
+### 🧫 reaction_diffusion.py
+*Organic Turing patterns via Gray-Scott simulation*
+
+Implements the Gray-Scott reaction-diffusion model to generate organic patterns—spots, stripes, mazes, and coral-like growth—all rendered as ASCII art. Based on Alan Turing's morphogenesis theory.
+
+```bash
+# Default mitosis pattern
+python reaction_diffusion.py
+
+# Specific patterns
+python reaction_diffusion.py --preset spots
+python reaction_diffusion.py --preset stripes
+python reaction_diffusion.py --preset maze
+
+# Watch it evolve
+python reaction_diffusion.py --preset coral --animate
+
+# Custom size and steps
+python reaction_diffusion.py --width 100 --height 50 --steps 2000
+```
+
+```python
+from reaction_diffusion import ReactionDiffusion
+
+# Quick preset
+rd = ReactionDiffusion.preset("spots", width=60, height=30)
+rd.seed_center()
+rd.evolve(1000)
+print(rd.render())
+
+# Stripes pattern (zebra-like)
+rd = ReactionDiffusion.preset("stripes", width=80, height=40)
+rd.seed_center(radius=4)
+rd.evolve(2000)
+print(rd.render())
+
+# Labyrinthine maze
+rd = ReactionDiffusion.preset("maze", width=70, height=35)
+rd.seed_random(n_seeds=15, radius=3)
+rd.evolve(1500)
+print(rd.render())
+
+# Custom parameters
+rd = ReactionDiffusion(
+    width=80, height=40,
+    f=0.035,  # Feed rate
+    k=0.065,  # Kill rate
+)
+rd.seed_noise(intensity=0.1)
+rd.evolve(1200)
+print(rd.render(invert=True))
+```
+
+**Available Presets:**
+
+| Preset | Pattern | Description |
+|--------|---------|-------------|
+| `mitosis` | Cell division | Organic cell-like splitting |
+| `spots` | Leopard spots | Classic Turing spots |
+| `stripes` | Zebra stripes | Parallel stripe formation |
+| `maze` | Labyrinth | Winding maze-like corridors |
+| `coral` | Branching | Coral/dendrite growth patterns |
+| `waves` | Pulsing | Traveling wave fronts |
+| `worms` | Vermicular | Worm-like connected structures |
+| `holes` | Negative spots | Inverse of spots pattern |
+| `chaos` | Turbulent | Chaotic, unpredictable mixing |
+| `fingerprint` | Whorls | Fingerprint-like curved ridges |
+
+**Seeding Methods:**
+
+```python
+# Single central seed - patterns radiate outward
+rd.seed_center(radius=5)
+
+# Multiple random seeds - patterns emerge everywhere
+rd.seed_random(n_seeds=10, radius=3)
+
+# Noise seeding - full-field pattern emergence
+rd.seed_noise(intensity=0.1)
+```
+
+**Animation:**
+
+```python
+# Animate in terminal
+rd = ReactionDiffusion.preset("mitosis", width=60, height=25)
+rd.seed_center()
+rd.animate(steps=2000, frame_skip=10, delay=0.05)
+```
+
+---
+
 ## API Reference
 
 ### Core Classes
