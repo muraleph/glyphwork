@@ -414,6 +414,174 @@ canvas = wave_text("Wavy!", 80, 24, frame=0, amplitude=2)
 
 ---
 
+## Generative Patterns
+
+Beyond the six canvases, glyphwork includes powerful generative systems based on mathematical rules. These create complex, beautiful patterns from surprisingly simple algorithms.
+
+### 🧬 Cellular Automata
+*Life, death, and everything in between*
+
+Conway's Game of Life, Wolfram's elementary automata, and other cellular automata rules—all rendered as ASCII art. Watch patterns evolve, oscillate, and create unexpected complexity from simple rules.
+
+#### Game of Life
+
+```python
+from glyphwork import CellularAutomaton, cellular_automata
+
+# Quick one-liner: random soup evolved 100 generations
+canvas = cellular_automata(60, 20, rule="life", generations=100, seed=42)
+canvas.print()
+
+# Full control with the class
+ca = CellularAutomaton(80, 30, rule="life")
+ca.add_glider(5, 5, direction="SE")      # Traveling pattern
+ca.add_r_pentomino(40, 15)               # Chaotic methuselah
+ca.add_gosper_gun(2, 2)                  # Infinite glider gun
+
+for gen in range(200):
+    ca.step()
+    print(f"\033[H{ca.to_canvas()}")     # Animate in terminal
+```
+
+**Preset Rules:**
+| Rule | Pattern | Description |
+|------|---------|-------------|
+| `life` | B3/S23 | Conway's classic—gliders, oscillators, still lifes |
+| `highlife` | B36/S23 | Like Life, but with self-replicating patterns |
+| `maze` | B3/S12345 | Creates intricate maze-like structures |
+| `seeds` | B2/S | Explosive growth, chaotic |
+| `day_night` | B3678/S34678 | Symmetric, stable patterns |
+| `coral` | B3/S45678 | Slow-growing coral-like formations |
+
+**Built-in Patterns:**
+```python
+ca = CellularAutomaton(80, 30)
+
+# Oscillators (period-2 and period-3)
+ca.add_blinker(10, 5)              # ─── ↔ │
+ca.add_beacon(20, 5)               # Flashing beacon
+ca.add_toad(30, 5)                 # 6-cell oscillator
+ca.add_pulsar(40, 5)               # Beautiful period-3
+
+# Still lifes (stable)
+ca.add_block(10, 15)               # 2×2 square
+
+# Spaceships (moving patterns)
+ca.add_glider(5, 20, "SE")         # Travels southeast
+
+# Methuselahs (long-lived chaos)
+ca.add_r_pentomino(40, 20)         # 1103 generations
+ca.add_acorn(50, 20)               # 5206 generations!
+
+# Infinite growth
+ca.add_gosper_gun(2, 10)           # Emits gliders forever
+```
+
+#### Wolfram's Elementary Automata
+
+1D cellular automata that evolve downward, creating triangular patterns. Each rule (0-255) produces unique behavior.
+
+```python
+from glyphwork import elementary_automaton
+
+# Famous rules
+rule_30 = elementary_automaton(80, 30, rule=30)   # Chaotic (used for RNG)
+rule_90 = elementary_automaton(80, 30, rule=90)   # Sierpinski triangle
+rule_110 = elementary_automaton(80, 30, rule=110) # Turing complete!
+rule_184 = elementary_automaton(80, 30, rule=184) # Traffic flow model
+
+rule_90.print()  # Beautiful fractal pattern
+```
+
+**Output (Rule 90 - Sierpinski Triangle):**
+```
+                              █                              
+                             █ █                             
+                            █   █                            
+                           █ █ █ █                           
+                          █       █                          
+                         █ █     █ █                         
+                        █   █   █   █                        
+                       █ █ █ █ █ █ █ █                       
+```
+
+---
+
+### 🐜 Langton's Ant
+*Order from chaos—a 2D Turing machine*
+
+An ant walks on a grid following absurdly simple rules, yet creates complex emergent behavior. The classic ant builds chaotic patterns for ~10,000 steps, then suddenly constructs an infinite diagonal "highway."
+
+```python
+from glyphwork import LangtonsAnt, langtons_ant
+
+# Quick one-liner
+canvas = langtons_ant(80, 30, steps=11000)  # Classic highway
+canvas.print()
+
+# Full control
+ant = LangtonsAnt(80, 40, rule="RL")        # Classic rules
+ant.run(11000)                               # Watch the highway emerge
+print(ant.to_canvas(show_ant=True))          # Show ant position
+
+# Check statistics
+print(f"Density: {ant.density():.1%}")
+print(f"Population: {ant.population()}")
+```
+
+**How It Works:**
+1. On a white cell: turn right → flip to black → move forward
+2. On a black cell: turn left → flip to white → move forward
+
+That's it. Yet from these two rules emerges:
+- ~10,000 steps of apparent chaos
+- Sudden transition to ordered "highway" construction
+- Highway repeats every 104 steps, forever
+
+**Multi-Color Rules:**
+
+Extended rules use more colors, each with its own turn direction. The rule string encodes the behavior: `L` = left, `R` = right, `N` = no turn, `U` = U-turn.
+
+```python
+# Symmetric patterns that grow forever (never builds highway)
+ant = LangtonsAnt(80, 40, rule="LLRR")
+ant.run(5000)
+print(ant.to_canvas(chars=" ░▒▓"))
+
+# Square-filling pattern
+ant = LangtonsAnt(80, 40, rule="LRRRRRLLR")
+ant.run(20000)
+print(ant.to_canvas(chars=" ·:░▒▓█▓░"))
+```
+
+**Preset Rules:**
+```python
+from glyphwork import LANGTON_RULES
+
+# Available presets
+# "classic"   - RL           - Original highway builder
+# "symmetric" - LLRR         - Symmetric growth forever  
+# "chaotic"   - RLR          - May never stabilize
+# "square"    - LRRRRRLLR    - Fills expanding square
+# "triangle"  - RRLLLRLLLRRR - Growing triangular shape
+# "cardioid"  - RLLR         - Heart-like patterns
+# "spiral"    - LLRR         - Symmetric spiral
+# "fractal"   - LRRRRLLLRLLLRRR - Fractal-like growth
+```
+
+**Highway Detection:**
+```python
+ant = LangtonsAnt(100, 50)
+highway_found, steps = ant.run_until_highway(max_steps=20000)
+
+if highway_found:
+    print(f"Highway emerged at step {steps}!")
+else:
+    print("No highway yet (chaotic rule?)")
+```
+
+---
+
 ## Quick Examples
 
 ### Starry Night
@@ -481,6 +649,43 @@ braille.circle(20, 12, 10, fill=True)
 # Overlay on animation canvas
 anim = AnimationCanvas(80, 24)
 anim.overlay_canvas(braille.to_canvas(), x=30, y=9)
+```
+
+### Game of Life Glider Gun
+
+```python
+from glyphwork import CellularAutomaton
+import time
+
+ca = CellularAutomaton(60, 20)
+ca.add_gosper_gun(2, 5)
+
+for _ in range(200):
+    print(f"\033[H\033[J{ca}")  # Clear and render
+    ca.step()
+    time.sleep(0.05)
+```
+
+### Langton's Ant Highway
+
+```python
+from glyphwork import langtons_ant
+
+# Classic highway emergence
+canvas = langtons_ant(60, 25, steps=11000)
+print(canvas.render())
+
+# Watch the diagonal highway pattern in the chaos!
+```
+
+### Wolfram Rule 110 (Turing Complete!)
+
+```python
+from glyphwork import elementary_automaton
+
+# Rule 110 is proven to be Turing complete
+canvas = elementary_automaton(80, 40, rule=110)
+canvas.print()
 ```
 
 ---
@@ -609,6 +814,8 @@ value = plasma(x=40, y=12, t=0.5, scale=0.1)  # returns 0-1
 | `ParticleCanvas` | Physics particle system |
 | `ColorCanvas` | ANSI color support with 256-color palette |
 | `TextCanvas` | Composable text effect animations |
+| `CellularAutomaton` | Conway's Game of Life and variants |
+| `LangtonsAnt` | 2D Turing machine with emergent behavior |
 
 ### Supporting Classes
 
@@ -639,6 +846,12 @@ from glyphwork import dither_gradient, dither_image, dither_function
 
 # Junctions (auto-merge box drawing characters)
 from glyphwork import JunctionCanvas, merge_chars, add_junctions
+
+# Cellular Automata
+from glyphwork import cellular_automata, life_pattern, elementary_automaton
+
+# Langton's Ant
+from glyphwork import langtons_ant, LANGTON_RULES
 ```
 
 ---
