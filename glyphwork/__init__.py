@@ -8,7 +8,15 @@ A library for creating beautiful text-based art through code.
 __version__ = "0.6.0"
 __author__ = "muraleph"
 
-from .patterns import wave, grid, noise, interference
+from .patterns import (
+    wave, grid, noise, interference, gradient, checkerboard,
+    cellular_automata, life_pattern, elementary_automaton,
+    CellularAutomaton,
+    DENSITY_CHARS, BLOCK_CHARS, WAVE_CHARS, DOT_CHARS, CELL_CHARS,
+)
+from .langtons_ant import (
+    LangtonsAnt, langtons_ant, Direction, LANGTON_RULES,
+)
 from .landscape import horizon, mountains, starfield, moon, water, compose_nightscape
 from .text import (
     rain, cascade, breathe, typewriter, glitch, wave_text,
@@ -62,7 +70,13 @@ __all__ = [
     "BrailleRenderer",
     "DitherCanvas",
     "JunctionCanvas",
-    "wave", "grid", "noise", "interference",
+    # Pattern generators
+    "wave", "grid", "noise", "interference", "gradient", "checkerboard",
+    "cellular_automata", "life_pattern", "elementary_automaton",
+    "CellularAutomaton",
+    "DENSITY_CHARS", "BLOCK_CHARS", "WAVE_CHARS", "DOT_CHARS", "CELL_CHARS",
+    # Langton's Ant
+    "LangtonsAnt", "langtons_ant", "Direction", "LANGTON_RULES",
     "horizon", "mountains", "starfield", "moon", "water", "compose_nightscape",
     "rain", "cascade", "breathe", "typewriter", "glitch", "wave_text",
     # Text effects (class-based)
