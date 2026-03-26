@@ -63,6 +63,15 @@ from .color_canvas import (
     BOLD, DIM, ITALIC, UNDERLINE, BLINK, REVERSE,
 )
 from .timeline import Frame, Timeline, bounce, reverse, repeat, hold_frame
+from .reaction_diffusion import (
+    ReactionDiffusion, RD, reaction_diffusion, list_presets,
+    PRESETS,
+    ORGANIC_CHARS, SOFT_CHARS, BINARY_CHARS,
+    # Aliases to avoid name conflicts with patterns.py
+    ORGANIC_CHARS as RD_ORGANIC_CHARS,
+    DENSITY_CHARS as RD_DENSITY_CHARS,
+    BLOCK_CHARS as RD_BLOCK_CHARS,
+)
 
 __all__ = [
     "Canvas",
@@ -112,4 +121,8 @@ __all__ = [
     "BOLD", "DIM", "ITALIC", "UNDERLINE", "BLINK", "REVERSE",
     # Timeline (frame-based animation)
     "Frame", "Timeline", "bounce", "reverse", "repeat", "hold_frame",
+    # Reaction-Diffusion
+    "ReactionDiffusion", "RD", "reaction_diffusion", "list_presets",
+    "PRESETS", "RD_ORGANIC_CHARS", "RD_DENSITY_CHARS", "RD_BLOCK_CHARS",
+    "BINARY_CHARS", "SOFT_CHARS",
 ]
