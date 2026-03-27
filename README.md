@@ -713,6 +713,140 @@ else:
 
 ---
 
+### 🌿 Iterated Function Systems (IFS)
+*Fractals from chaos—the chaos game algorithm*
+
+IFS generates intricate fractals by repeatedly applying random contractive transformations. Starting from any point, the algorithm probabilistically chooses a transformation, applies it, and plots the result—thousands of times. What emerges from this apparent chaos are stunningly detailed attractors: ferns, triangles, dragons, and more.
+
+```python
+from glyphwork import ifs_art, IFS, barnsley_fern, render_ascii
+
+# Quick one-liner
+print(ifs_art("barnsley_fern", width=60, height=30))
+
+# Full control with the IFS class
+fern = barnsley_fern()
+print(render_ascii(fern, width=80, height=40, iterations=100000))
+```
+
+**Output (Barnsley Fern):**
+```
+                              :                               
+                             :#                               
+                            :##                               
+                           .-##                               
+                        .:-=##:                               
+                  ..:--=+###:                                 
+              .:-==++*####+.                                  
+          .:--=++*#####+-.                                    
+       .-===+*#####*+-.                                       
+     .-==+*#####*+-:-.                                        
+    :-=+*####*+=-::-=*##+:.                                   
+   :-+*###*+=--:-=+*#####=.                                   
+  :-+###*+=-::-=+*####*+:                                     
+  :+###*=-::-=+*###*+-:.                                      
+  :###+=::-=+*##*+=:.:=*#*=:                                  
+  :*#+=::-+*##*+-:.:=+####*:                                  
+   ##=::-*##*+-:.:=+*###*=.                                   
+   +#::-*#*+-:.:=+*##*+-:                                     
+   =#::=##+-::-+*##*=-:                                       
+    #::+#+=::-*##*=-:.                                        
+    #::*#+::-*#*+-:.                                          
+    +::##-:=##+-:.                                            
+    .::*#:=##=::                                              
+      :*#-##=:.                                               
+       =#*#+:.                                                
+        ##*.                                                  
+         #:                                                   
+```
+
+**How the Chaos Game Works:**
+
+1. Start at any point (it doesn't matter where)
+2. Randomly pick a transformation based on its probability
+3. Apply the transformation to get a new point
+4. Plot the point
+5. Repeat thousands of times
+
+After a brief "burn-in" period, points converge to the fractal attractor—the stable shape encoded by the transformation rules.
+
+**Preset Fractals:**
+
+| Preset | Description | Transforms |
+|--------|-------------|------------|
+| `barnsley_fern` | Classic Barnsley fern—stem, body, leaflets | 4 |
+| `sierpinski_triangle` | Sierpinski gasket—self-similar triangle | 3 |
+| `sierpinski_carpet` | Sierpinski carpet—3×3 grid with center removed | 8 |
+| `dragon_curve` | Heighway dragon—folding paper fractal | 2 |
+| `maple_leaf` | Stylized maple leaf shape | 4 |
+
+```python
+# All presets
+from glyphwork import ifs_art, list_presets
+
+print(list_presets())  # ['barnsley_fern', 'sierpinski_triangle', ...]
+
+# Sierpinski triangle
+print(ifs_art("sierpinski", width=60, height=25))
+
+# Dragon curve with blocks
+from glyphwork import BLOCK_CHARS
+print(ifs_art("dragon", width=70, height=30, charset=BLOCK_CHARS))
+```
+
+**Rendering Options:**
+
+```python
+from glyphwork import IFS, render_ascii, get_preset
+from glyphwork import DENSITY_CHARS, BLOCK_CHARS, DOT_CHARS
+
+fern = get_preset("fern")  # Aliases work too
+
+# Different character sets
+print(render_ascii(fern, charset=DENSITY_CHARS))  # " .:-=+*#%@" (default)
+print(render_ascii(fern, charset=BLOCK_CHARS))   # " ░▒▓█"
+print(render_ascii(fern, charset=DOT_CHARS))     # " ·•●"
+
+# Inverted (dark background)
+print(render_ascii(fern, invert=True))
+
+# Control resolution
+print(render_ascii(fern, width=120, height=60, iterations=200000))
+```
+
+**Custom IFS:**
+
+Create your own fractals by defining affine transformations:
+
+```python
+from glyphwork import IFS, render_ascii
+
+# Custom Sierpinski-like
+ifs = IFS(name="my_fractal")
+ifs.add_transform(0.5, 0, 0, 0.5, 0.0, 0.0, probability=0.25)
+ifs.add_transform(0.5, 0, 0, 0.5, 0.5, 0.0, probability=0.25)
+ifs.add_transform(0.5, 0, 0, 0.5, 0.0, 0.5, probability=0.25)
+ifs.add_transform(0.5, 0, 0, 0.5, 0.5, 0.5, probability=0.25)
+
+print(render_ascii(ifs, width=60, height=30))
+
+# Each transform is: (a, b, c, d, e, f, probability)
+# Where x' = a*x + b*y + e
+#       y' = c*x + d*y + f
+```
+
+**Memory-Efficient Iteration:**
+
+```python
+# For very large iterations, use the iterator
+fern = barnsley_fern()
+for x, y in fern.chaos_game_iter(iterations=1000000):
+    # Process points one at a time
+    pass
+```
+
+---
+
 ## Quick Examples
 
 ### Starry Night
@@ -817,6 +951,18 @@ from glyphwork import elementary_automaton
 # Rule 110 is proven to be Turing complete
 canvas = elementary_automaton(80, 40, rule=110)
 canvas.print()
+```
+
+### IFS Barnsley Fern
+
+```python
+from glyphwork import ifs_art, BLOCK_CHARS
+
+# Classic Barnsley fern
+print(ifs_art("barnsley_fern", width=60, height=30))
+
+# Sierpinski triangle with block characters
+print(ifs_art("sierpinski", width=50, height=25, charset=BLOCK_CHARS))
 ```
 
 ### L-System Dragon Curve
@@ -1164,6 +1310,8 @@ rd.animate(steps=2000, frame_skip=10, delay=0.05)
 | `CellularAutomaton` | Conway's Game of Life and variants |
 | `LangtonsAnt` | 2D Turing machine with emergent behavior |
 | `LSystem` | Lindenmayer system fractals and plants |
+| `IFS` | Iterated Function System fractal generator |
+| `ASCIIRenderer` | IFS-to-ASCII renderer with density mapping |
 | `LineStyle` | Box drawing character set with 8 presets |
 
 ### Supporting Classes
@@ -1205,6 +1353,12 @@ from glyphwork import langtons_ant, LANGTON_RULES
 # L-Systems
 from glyphwork import LSystem, lsystem, list_lsystem_presets
 from glyphwork import PRESETS, PRESET_FRACTALS, PRESET_PLANTS, PRESET_GEOMETRIC
+
+# IFS (Iterated Function Systems)
+from glyphwork import IFS, AffineTransform, ASCIIRenderer
+from glyphwork import ifs_art, render_ascii, get_preset, list_presets
+from glyphwork import barnsley_fern, sierpinski_triangle, sierpinski_carpet, dragon_curve, maple_leaf
+from glyphwork import DENSITY_CHARS, BLOCK_CHARS, DOT_CHARS
 
 # Box Drawing & Tables
 from glyphwork import box_drawing, table, horizontal_line, vertical_line
