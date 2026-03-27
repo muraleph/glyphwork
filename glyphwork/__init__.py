@@ -84,6 +84,15 @@ from .figlet import (
     figlet_text, figlet_text_str, FigletCanvas, list_fonts,
     FONT_CATEGORIES, FigletError, PYFIGLET_AVAILABLE,
 )
+from .lsystems import (
+    LSystem, LSystemConfig, TurtleRenderer,
+    TurtleState, RenderBounds,
+    PRESETS as LSYSTEM_PRESETS, PRESET_CATEGORIES as LSYSTEM_CATEGORIES,
+    PRESET_FRACTALS, PRESET_PLANTS, PRESET_GEOMETRIC,
+    lsystem, list_lsystem_presets,
+    # Alias for BrailleRenderer name collision
+    BrailleRenderer as LSystemBrailleRenderer,
+)
 
 __all__ = [
     "Canvas",
@@ -147,4 +156,10 @@ __all__ = [
     # FIGlet text rendering
     "figlet_text", "figlet_text_str", "FigletCanvas", "list_fonts",
     "FONT_CATEGORIES", "FigletError", "PYFIGLET_AVAILABLE",
+    # L-Systems (Lindenmayer Systems)
+    "LSystem", "LSystemConfig", "TurtleRenderer", "LSystemBrailleRenderer",
+    "TurtleState", "RenderBounds",
+    "LSYSTEM_PRESETS", "LSYSTEM_CATEGORIES",
+    "PRESET_FRACTALS", "PRESET_PLANTS", "PRESET_GEOMETRIC",
+    "lsystem", "list_lsystem_presets",
 ]
