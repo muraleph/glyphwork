@@ -12,7 +12,8 @@ authors = [
     {name = "muraleph", email = "muraleph@muraleph.art"}
 ]
 requires-python = ">=3.8"
-keywords = ["ascii", "art", "generative", "text", "unicode", "terminal", "braille"]
+keywords = ["ascii", "art", "generative", "text", "unicode", "terminal", "braille", "figlet"]
+dependencies = ["pyfiglet>=0.8"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
