@@ -819,6 +819,21 @@ canvas = elementary_automaton(80, 40, rule=110)
 canvas.print()
 ```
 
+### L-System Dragon Curve
+
+```python
+from glyphwork import lsystem
+
+# Classic dragon curve fractal
+print(lsystem('dragon', iterations=12, width=60, height=30))
+
+# Or animate it growing
+from glyphwork import LSystem
+ls = LSystem('fractal_plant')
+for frame in ls.animate(1, 5, width=50, height=25):
+    print("\033[H\033[J" + frame)
+```
+
 ---
 
 ## Effect Scripts
@@ -932,6 +947,115 @@ value = plasma(x=40, y=12, t=0.5, scale=0.1)  # returns 0-1
 
 ---
 
+### 🌿 L-Systems (lsystems.py)
+*Fractals, plants, and geometric patterns from simple rules*
+
+Lindenmayer systems (L-systems) generate complex fractal patterns through iterative string rewriting. From the humble axiom "F" and a few rules, watch intricate curves, realistic plants, and mesmerizing geometric patterns emerge—all rendered as ASCII art.
+
+```bash
+# Dragon curve
+python -c "from glyphwork import lsystem; print(lsystem('dragon', iterations=10))"
+
+# Fractal plant
+python -c "from glyphwork import lsystem; print(lsystem('fractal_plant', iterations=5))"
+
+# High-resolution braille
+python -c "from glyphwork import lsystem; print(lsystem('koch_snowflake', iterations=4, style='braille'))"
+```
+
+```python
+from glyphwork import LSystem, lsystem
+
+# Quick one-liner
+print(lsystem('dragon', iterations=10, width=60, height=30))
+
+# Full control with the class
+ls = LSystem('hilbert')
+print(ls.render(iterations=5, width=80, height=40, style='unicode'))
+
+# Explore the preset
+print(ls.info())  # Shows axiom, rules, angle, description
+```
+
+**Preset Categories:**
+
+| Category | Presets | Description |
+|----------|---------|-------------|
+| **Fractal Curves** | `dragon`, `koch`, `koch_snowflake`, `sierpinski`, `sierpinski_arrow`, `hilbert`, `peano`, `gosper`, `levy` | Classic mathematical fractals and space-filling curves |
+| **Plants & Trees** | `binary_tree`, `fractal_plant`, `weed`, `bush`, `tree`, `sticks`, `fern` | Organic branching structures with `[` `]` stack notation |
+| **Geometric** | `square_koch`, `cross`, `pentagram`, `tiles`, `crystal`, `triangle`, `hexagon` | Tessellations and symmetric patterns |
+
+**Rendering Styles:**
+
+```python
+ls = LSystem('dragon')
+
+# Box-drawing characters (default)
+print(ls.render(iterations=10, style='unicode'))
+
+# ASCII-only (universal compatibility)
+print(ls.render(iterations=10, style='ascii'))
+
+# Braille (4× resolution!)
+print(ls.render(iterations=12, style='braille'))
+```
+
+**Animation Support:**
+
+Watch patterns grow iteration by iteration:
+
+```python
+import time
+
+ls = LSystem('koch_snowflake')
+
+# Generate all frames
+frames = ls.animate(start=0, end=5, width=60, height=25)
+
+# Animate in terminal
+for frame in frames:
+    print("\033[H\033[J")  # Clear screen
+    print(frame)
+    time.sleep(0.5)
+```
+
+**Custom L-Systems:**
+
+Create your own patterns with custom axioms and rules:
+
+```python
+from glyphwork import LSystem
+
+# Custom branching pattern
+custom = LSystem.custom(
+    axiom='F',
+    rules={'F': 'F[+F]F[-F]F'},
+    angle=25.7,
+    name='My Branching Tree',
+    iterations=4
+)
+print(custom.render(width=60, height=30))
+
+# Discover all presets
+print(LSystem.list_presets())  # By category
+print(LSystem.all_presets())   # Flat list
+print(LSystem.describe_preset('dragon'))  # Detailed info
+```
+
+**L-System Symbols:**
+
+| Symbol | Action |
+|--------|--------|
+| `F`, `G`, `A`, `B`, `0`, `1` | Move forward and draw |
+| `f` | Move forward without drawing |
+| `+` | Turn left by angle |
+| `-` | Turn right by angle |
+| `\|` | Turn 180° |
+| `[` | Push state (save position/angle) |
+| `]` | Pop state (restore position/angle) |
+
+---
+
 ### 🧫 reaction_diffusion.py
 *Organic Turing patterns via Gray-Scott simulation*
 
@@ -1039,6 +1163,7 @@ rd.animate(steps=2000, frame_skip=10, delay=0.05)
 | `TextCanvas` | Composable text effect animations |
 | `CellularAutomaton` | Conway's Game of Life and variants |
 | `LangtonsAnt` | 2D Turing machine with emergent behavior |
+| `LSystem` | Lindenmayer system fractals and plants |
 | `LineStyle` | Box drawing character set with 8 presets |
 
 ### Supporting Classes
@@ -1076,6 +1201,10 @@ from glyphwork import cellular_automata, life_pattern, elementary_automaton
 
 # Langton's Ant
 from glyphwork import langtons_ant, LANGTON_RULES
+
+# L-Systems
+from glyphwork import LSystem, lsystem, list_lsystem_presets
+from glyphwork import PRESETS, PRESET_FRACTALS, PRESET_PLANTS, PRESET_GEOMETRIC
 
 # Box Drawing & Tables
 from glyphwork import box_drawing, table, horizontal_line, vertical_line
