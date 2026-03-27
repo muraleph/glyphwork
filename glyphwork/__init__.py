@@ -80,6 +80,10 @@ from .line_styles import (
     get_style, create_style,
     box_drawing, horizontal_line, vertical_line, table_row, table,
 )
+from .figlet import (
+    figlet_text, FigletCanvas, list_fonts,
+    FONT_CATEGORIES, PYFIGLET_AVAILABLE,
+)
 
 __all__ = [
     "Canvas",
@@ -140,4 +144,7 @@ __all__ = [
     "LINE_STYLES", "DEFAULT_STYLE",
     "get_style", "create_style",
     "box_drawing", "horizontal_line", "vertical_line", "table_row", "table",
+    # FIGlet
+    "figlet_text", "FigletCanvas", "list_fonts",
+    "FONT_CATEGORIES", "PYFIGLET_AVAILABLE",
 ]

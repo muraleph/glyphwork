@@ -31,7 +31,9 @@ classifiers = [
 
 [project.optional-dependencies]
 images = ["Pillow>=9.0"]
+figlet = ["pyfiglet>=0.8"]
 dev = ["pytest>=7.0", "build", "twine"]
+all = ["Pillow>=9.0", "pyfiglet>=0.8"]
 
 [project.urls]
 Homepage = "https://github.com/muraleph/glyphwork"
