@@ -81,11 +81,8 @@ from .line_styles import (
     box_drawing, horizontal_line, vertical_line, table_row, table,
 )
 from .figlet import (
-    figlet_text,
-    FigletCanvas,
-    list_fonts,
-    FONT_CATEGORIES,
-    FigletError,
+    figlet_text, figlet_text_str, FigletCanvas, list_fonts,
+    FONT_CATEGORIES, FigletError, PYFIGLET_AVAILABLE,
 )
 
 __all__ = [
@@ -148,5 +145,6 @@ __all__ = [
     "get_style", "create_style",
     "box_drawing", "horizontal_line", "vertical_line", "table_row", "table",
     # FIGlet text rendering
-    "figlet_text", "FigletCanvas", "list_fonts", "FONT_CATEGORIES", "FigletError",
+    "figlet_text", "figlet_text_str", "FigletCanvas", "list_fonts",
+    "FONT_CATEGORIES", "FigletError", "PYFIGLET_AVAILABLE",
 ]
