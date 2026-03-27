@@ -93,6 +93,13 @@ from .lsystems import (
     # Alias for BrailleRenderer name collision
     BrailleRenderer as LSystemBrailleRenderer,
 )
+from .ifs import (
+    IFS, AffineTransform, ASCIIRenderer,
+    barnsley_fern, sierpinski_triangle, sierpinski_carpet, dragon_curve, maple_leaf,
+    PRESETS as IFS_PRESETS, list_presets as list_ifs_presets, get_preset as get_ifs_preset,
+    render_ascii as render_ifs_ascii, ifs_art,
+    DENSITY_CHARS as IFS_DENSITY_CHARS, BLOCK_CHARS as IFS_BLOCK_CHARS,
+)
 
 __all__ = [
     "Canvas",
@@ -162,4 +169,10 @@ __all__ = [
     "LSYSTEM_PRESETS", "LSYSTEM_CATEGORIES",
     "PRESET_FRACTALS", "PRESET_PLANTS", "PRESET_GEOMETRIC",
     "lsystem", "list_lsystem_presets",
+    # IFS (Iterated Function Systems)
+    "IFS", "AffineTransform", "ASCIIRenderer",
+    "barnsley_fern", "sierpinski_triangle", "sierpinski_carpet", "dragon_curve", "maple_leaf",
+    "IFS_PRESETS", "list_ifs_presets", "get_ifs_preset",
+    "render_ifs_ascii", "ifs_art",
+    "IFS_DENSITY_CHARS", "IFS_BLOCK_CHARS",
 ]
