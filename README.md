@@ -847,6 +847,134 @@ for x, y in fern.chaos_game_iter(iterations=1000000):
 
 ---
 
+### 🦋 Strange Attractors
+*Chaos rendered beautiful—density maps of dynamical systems*
+
+Strange attractors are geometric structures that emerge from chaotic systems. Despite following deterministic rules, these systems exhibit sensitive dependence on initial conditions (the "butterfly effect") and trace out intricate, never-repeating paths through space. This module renders them as ASCII art using density mapping—the more a trajectory visits a region, the denser the character.
+
+```python
+from glyphwork import attractor_art, list_presets
+
+# Quick one-liner with presets
+print(attractor_art('lorenz_classic', width=60, height=30))
+
+# See all available presets
+print(list_presets())
+# ['lorenz_classic', 'lorenz_tight', 'lorenz_wide', 'rossler_spiral', 
+#  'rossler_funnel', 'clifford_ribbon', 'clifford_swirl', 'clifford_organic',
+#  'dejong_crystal', 'dejong_web']
+```
+
+**Output (Lorenz Attractor):**
+```
+                  ░▒▓█▓▒░                 ░▒▓█▓▒░                  
+               ░▒▓██████▓▒░             ░▒▓██████▓▒░               
+              ▒▓██████████▓▒           ▒▓██████████▓▒              
+             ░▓████████████▓░         ░▓████████████▓░             
+             ░▓█████████████▒         ▒█████████████▓░             
+              ▒█████████████▓░       ░▓█████████████▒              
+               ░▓████████████▒░     ░▒████████████▓░               
+                 ░▒▓████████▓▒░░   ░░▒▓████████▓▒░                 
+                    ░░▒▒▓▓▒░░░░░░░░░░░░▒▓▓▒▒░░                    
+                           ░░░░░░░░░░░                             
+```
+
+**Full Control with Classes:**
+
+```python
+from glyphwork import LorenzAttractor, RosslerAttractor, DensityRenderer
+
+# Create attractor with custom parameters
+attractor = LorenzAttractor(sigma=10.0, rho=28.0, beta=8.0/3.0)
+
+# Generate trajectory (50k points, skip initial transient)
+trajectory = attractor.trajectory(steps=50000, dt=0.01, skip=100)
+
+# Render with density mapping
+renderer = DensityRenderer(width=80, height=40, gradient='blocks')
+print(renderer.render(trajectory, attractor.bounds(), axes='xz'))
+```
+
+**Available Attractors:**
+
+| Attractor | Dimensions | Character | Description |
+|-----------|------------|-----------|-------------|
+| `LorenzAttractor` | 3D | Butterfly wings | The iconic chaotic system discovered by Edward Lorenz (1963) |
+| `RosslerAttractor` | 3D | Single spiral | Simpler chaos with elegant spirals and occasional jumps |
+| `CliffordAttractor` | 2D | Ribbons & swirls | Stunning variety—ribbons, spirals, organic curves |
+| `DeJongAttractor` | 2D | Angular/crystalline | Similar to Clifford but with more angular structures |
+
+**Preset Gallery:**
+
+| Preset | Attractor | Description |
+|--------|-----------|-------------|
+| `lorenz_classic` | Lorenz | Classic butterfly attractor (σ=10, ρ=28, β=8/3) |
+| `lorenz_tight` | Lorenz | Lower rho, tighter spirals |
+| `lorenz_wide` | Lorenz | Near T(3,2) torus knot regime |
+| `rossler_spiral` | Rössler | Classic Rössler spiral pattern |
+| `rossler_funnel` | Rössler | Funnel regime with higher c parameter |
+| `clifford_ribbon` | Clifford | Flowing ribbon-like curves |
+| `clifford_swirl` | Clifford | Swirling, hypnotic pattern |
+| `clifford_organic` | Clifford | Organic, biomorphic forms |
+| `dejong_crystal` | De Jong | Crystalline angular structure |
+| `dejong_web` | De Jong | Web-like interconnected pattern |
+
+**2D Attractors (Clifford & De Jong):**
+
+```python
+from glyphwork import CliffordAttractor, DeJongAttractor, render_ascii
+
+# Clifford attractor - explore parameter space
+# Parameters in [-3, 3] produce wildly different patterns
+clifford = CliffordAttractor(a=-1.4, b=1.6, c=1.0, d=0.7)
+print(render_ascii(clifford, width=60, height=30, steps=100000))
+
+# De Jong - more angular, crystalline structures
+dejong = DeJongAttractor(a=-2.0, b=-2.0, c=-1.2, d=2.0)
+print(render_ascii(dejong, width=60, height=30, steps=100000))
+```
+
+**Rendering Options:**
+
+```python
+from glyphwork import DensityRenderer, LorenzAttractor
+from glyphwork import DENSITY_CHARS, BLOCK_CHARS, DOT_CHARS
+
+attractor = LorenzAttractor()
+trajectory = attractor.trajectory(steps=50000)
+bounds = attractor.bounds()
+
+# Different character gradients
+renderer = DensityRenderer(width=80, height=40, gradient='blocks')   # " ░▒▓█"
+renderer = DensityRenderer(width=80, height=40, gradient='density')  # " .:-=+*#%@"
+renderer = DensityRenderer(width=80, height=40, gradient='dots')     # " ·•●"
+renderer = DensityRenderer(width=80, height=40, gradient='extended') # 66-char gradient
+
+# Custom character set
+renderer = DensityRenderer(width=80, height=40, gradient=' .:;oO@#')
+
+# Projection axes for 3D attractors
+print(renderer.render(trajectory, bounds, axes='xz'))  # Top-down (butterfly)
+print(renderer.render(trajectory, bounds, axes='xy'))  # Front view
+print(renderer.render(trajectory, bounds, axes='yz'))  # Side view
+
+# Linear vs logarithmic density scaling
+renderer = DensityRenderer(log_scale=True)   # Better visual distribution (default)
+renderer = DensityRenderer(log_scale=False)  # Raw density mapping
+```
+
+**Memory-Efficient Streaming:**
+
+```python
+# For very long trajectories, use streaming iteration
+attractor = LorenzAttractor()
+for point in attractor.trajectory_streaming(steps=1000000, dt=0.01):
+    x, y, z = point
+    # Process points one at a time without storing all in memory
+```
+
+---
+
 ## Quick Examples
 
 ### Starry Night
@@ -963,6 +1091,19 @@ print(ifs_art("barnsley_fern", width=60, height=30))
 
 # Sierpinski triangle with block characters
 print(ifs_art("sierpinski", width=50, height=25, charset=BLOCK_CHARS))
+```
+
+### Strange Attractor (Lorenz Butterfly)
+
+```python
+from glyphwork import attractor_art, LorenzAttractor, render_ascii
+
+# Quick preset
+print(attractor_art('lorenz_classic', width=60, height=30))
+
+# Full control
+attractor = LorenzAttractor(sigma=10.0, rho=28.0, beta=8.0/3.0)
+print(render_ascii(attractor, width=80, height=40, steps=50000))
 ```
 
 ### L-System Dragon Curve
@@ -1312,6 +1453,11 @@ rd.animate(steps=2000, frame_skip=10, delay=0.05)
 | `LSystem` | Lindenmayer system fractals and plants |
 | `IFS` | Iterated Function System fractal generator |
 | `ASCIIRenderer` | IFS-to-ASCII renderer with density mapping |
+| `LorenzAttractor` | 3D Lorenz butterfly chaotic system |
+| `RosslerAttractor` | 3D Rössler spiral attractor |
+| `CliffordAttractor` | 2D Clifford attractor with ribbon-like curves |
+| `DeJongAttractor` | 2D De Jong attractor with angular patterns |
+| `DensityRenderer` | Trajectory-to-ASCII density mapper |
 | `LineStyle` | Box drawing character set with 8 presets |
 
 ### Supporting Classes
@@ -1359,6 +1505,12 @@ from glyphwork import IFS, AffineTransform, ASCIIRenderer
 from glyphwork import ifs_art, render_ascii, get_preset, list_presets
 from glyphwork import barnsley_fern, sierpinski_triangle, sierpinski_carpet, dragon_curve, maple_leaf
 from glyphwork import DENSITY_CHARS, BLOCK_CHARS, DOT_CHARS
+
+# Strange Attractors
+from glyphwork import LorenzAttractor, RosslerAttractor, CliffordAttractor, DeJongAttractor
+from glyphwork import DensityRenderer, attractor_art, create_attractor
+from glyphwork import list_presets as list_attractor_presets, get_preset as get_attractor_preset
+from glyphwork import DENSITY_CHARS, BLOCK_CHARS, DOT_CHARS, SIMPLE_CHARS, EXTENDED_CHARS
 
 # Box Drawing & Tables
 from glyphwork import box_drawing, table, horizontal_line, vertical_line
