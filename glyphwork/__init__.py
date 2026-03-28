@@ -109,6 +109,21 @@ from .attractors import (
     attractor_art, render_ascii as render_attractor_ascii,
     DENSITY_CHARS as ATTRACTOR_DENSITY_CHARS, BLOCK_CHARS as ATTRACTOR_BLOCK_CHARS,
 )
+from .flowfield import (
+    # Core classes
+    SimplexNoise,
+    FlowField,
+    FlowFieldCanvas,
+    TracedCurve,
+    TracedPoint,
+    # Convenience functions
+    flowfield,
+    list_presets as list_flowfield_presets,
+    # Constants
+    PRESETS as FLOWFIELD_PRESETS,
+    DIRECTION_ARROWS,
+    LINE_DIRECTION,
+)
 
 __all__ = [
     "Canvas",
@@ -191,4 +206,9 @@ __all__ = [
     "ATTRACTOR_PRESETS", "list_attractor_presets", "get_attractor_preset",
     "create_attractor", "attractor_art", "render_attractor_ascii",
     "ATTRACTOR_DENSITY_CHARS", "ATTRACTOR_BLOCK_CHARS",
+    # Flow Fields
+    "SimplexNoise", "FlowField", "FlowFieldCanvas",
+    "TracedCurve", "TracedPoint",
+    "flowfield", "list_flowfield_presets",
+    "FLOWFIELD_PRESETS", "DIRECTION_ARROWS", "LINE_DIRECTION",
 ]
