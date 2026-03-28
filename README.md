@@ -978,37 +978,25 @@ for point in attractor.trajectory_streaming(steps=1000000, dt=0.01):
 ### 🌊 Flow Fields
 *Noise-based vector fields for fluid-like patterns*
 
-Flow fields use Perlin noise and other functions to create smooth vector fields that guide particles through space. The result is organic, fluid-like patterns—streams, vortices, and flowing currents rendered as ASCII art.
+Flow fields use simplex noise and other functions to create smooth vector fields that guide particles through space. The result is organic, fluid-like patterns—streams, vortices, and flowing currents rendered in high-resolution Unicode braille.
 
 ```python
-from glyphwork import FlowFieldCanvas, flow_field_art, list_flow_field_presets
+from glyphwork import flowfield, list_flowfield_presets
 
 # Quick one-liner
-print(flow_field_art('CURL_FLUID', width=60, height=30))
+print(flowfield(preset='CURL_FLUID', width=60, height=20, seed=42))
 
 # See all presets
-print(list_flow_field_presets())
-# ['PERLIN_CLASSIC', 'CURL_FLUID', 'TURBULENT', 'SPIRAL', 'RADIAL', 'CRYSTALLINE', 'GENTLE', 'CHAOTIC']
+print(list_flowfield_presets())
+# {'PERLIN_CLASSIC': 'Classic Perlin noise field with smooth curves', ...}
 ```
 
 **Output (Curl Fluid):**
 ```
-              .:-=+**##%@@@%##*+=-.              
-          .:=+*#%@@@@@@@@@@@@@@%#*=:.            
-        :=*#%@@@@@@@%##**##%@@@@@%#*=:          
-      .=*%@@@@@%*+-:..    .:-+*%@@@@@%*=.        
-     :+%@@@@%+:.              .:+%@@@@%+:       
-    :*%@@@%=.                    .=%@@@%*:      
-   .+%@@@*:                        :*@@@%+.    
-   :*@@%+.                          .+%@@*:    
-   :*@@%:                            :%@@*:    
-   .+%@%:                            :%@%+.    
-    :+@@*:                          :*@@+:     
-     :*@@%=.                      .=%@@*:      
-      .=*%@@%+:.              .:+%@@%*=.       
-        :=*%@@@@@%*+=----=+*%@@@@@%*=:         
-          .:=+*#%@@@@@@@@@@@@@%#*+-:.           
-              .:-=+**##%%##**+=-:.              
+⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣷⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣿⣿⣶⣄⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣧⡀⠀⠀⠀⠀
+⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀
+⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀
 ```
 
 **Full Control:**
@@ -1016,31 +1004,31 @@ print(list_flow_field_presets())
 ```python
 from glyphwork import FlowFieldCanvas
 
-# Create canvas with preset
-canvas = FlowFieldCanvas(80, 40, preset='PERLIN_CLASSIC', seed=42)
+# Create canvas
+canvas = FlowFieldCanvas(60, 20)
 
-# Add particles
-canvas.populate_particles(count=500)
+# Generate field with preset
+canvas.generate_field(preset="CURL_FLUID", seed=42)
 
-# Run simulation
-canvas.evolve(steps=100)
+# Render particles flowing through the field
+canvas.render_particles(num_particles=100, steps=200)
 
-# Render
-print(canvas.render())
+# Output
+print(canvas.frame())
 ```
 
 **Available Presets:**
 
 | Preset | Description |
 |--------|-------------|
-| `PERLIN_CLASSIC` | Classic Perlin noise flow—organic, smooth streaming |
-| `CURL_FLUID` | Curl noise creating incompressible fluid-like flow |
-| `TURBULENT` | Chaotic, turbulent flow with high-frequency noise |
-| `SPIRAL` | Spiraling inward/outward flow from center |
-| `RADIAL` | Radial flow emanating from center |
-| `CRYSTALLINE` | Angular, crystalline patterns with quantized directions |
-| `GENTLE` | Soft, gentle flow with minimal variation |
-| `CHAOTIC` | Highly chaotic, unpredictable flow patterns |
+| `PERLIN_CLASSIC` | Classic Perlin noise field with smooth curves |
+| `CURL_FLUID` | Curl noise for fluid-like, divergence-free flow |
+| `TURBULENT` | Multi-octave turbulent noise field |
+| `SPIRAL` | Spiral pattern radiating from center |
+| `RADIAL` | Radial pattern emanating from center |
+| `CRYSTALLINE` | Quantized angles for geometric patterns |
+| `GENTLE` | Very smooth, gentle flow |
+| `CHAOTIC` | Highly variable, chaotic field |
 
 **Animation with Time Parameter:**
 
@@ -1051,63 +1039,39 @@ import time
 
 from glyphwork import FlowFieldCanvas
 
-canvas = FlowFieldCanvas(60, 25, preset='CURL_FLUID', seed=42)
-canvas.populate_particles(count=400)
+canvas = FlowFieldCanvas(60, 20)
 
 # Animate over time
 for t in range(100):
-    canvas.time = t * 0.1  # Advance time
-    canvas.clear_density()
-    canvas.evolve(steps=20)
-    
-    print("\033[H\033[J")  # Clear terminal
-    print(canvas.render())
-    time.sleep(0.05)
+    canvas.clear()
+    canvas.generate_field(preset="PERLIN_CLASSIC", time=t * 0.05)
+    canvas.render_particles(50)
+
+    print("\033[H" + canvas.frame())  # ANSI home cursor
+    time.sleep(0.03)
 ```
 
-**Visualize Flow Vectors:**
+**Visualize Flow Directions:**
 
 ```python
-from glyphwork import render_flow_vectors
+from glyphwork import FlowFieldCanvas
 
-# Show directional arrows for the flow field
-print(render_flow_vectors('SPIRAL', width=40, height=20, spacing=3))
+canvas = FlowFieldCanvas(30, 10)
+canvas.generate_field(preset="SPIRAL", seed=42)
+
+# Show field as directional arrows
+print(canvas.field.to_ascii(mode="arrows"))
 ```
 
 **Output:**
 ```
-    ↖   ↑   ↑   ↑   ↗       
-  ↖   ↖   ↑   ↗   ↗   →    
-←   ↖   ↖   ↗   ↗   →   →  
-←   ←   ↖   ↗   →   →   →  
-←   ←   ←   →   →   →   ↘  
-  ↙   ←   ↙   ↘   →   ↘    
-    ↙   ↓   ↓   ↓   ↘       
-```
-
-**Custom Flow Fields:**
-
-Create custom presets for specific effects:
-
-```python
-from glyphwork import FlowFieldCanvas, FlowFieldPreset
-import math
-
-# Custom swirling vortex preset
-VORTEX = FlowFieldPreset(
-    name="VORTEX",
-    description="Swirling vortex with strong spiral",
-    noise_scale=0.02,
-    spiral_strength=1.2,
-    rotation_scale=math.pi,
-    octaves=3,
-    time_scale=0.15
-)
-
-canvas = FlowFieldCanvas(60, 30, preset=VORTEX)
-canvas.populate_particles(count=600, distribution="center")
-canvas.evolve(steps=150)
-print(canvas.render())
+    ↖   ↑   ↑   ↑   ↗
+  ↖   ↖   ↑   ↗   ↗   →
+←   ↖   ↖   ↗   ↗   →   →
+←   ←   ↖   ↗   →   →   →
+←   ←   ←   →   →   →   ↘
+  ↙   ←   ↙   ↘   →   ↘
+    ↙   ↓   ↓   ↓   ↘
 ```
 
 ---
@@ -1249,18 +1213,16 @@ print(render_ascii(attractor, width=80, height=40, steps=50000))
 from glyphwork import FlowFieldCanvas
 import time
 
-canvas = FlowFieldCanvas(60, 25, preset='CURL_FLUID', seed=42)
-canvas.populate_particles(count=400)
+canvas = FlowFieldCanvas(60, 20)
 
 # Animate the flow
 for frame in range(100):
-    canvas.time = frame * 0.1
-    canvas.clear_density()
-    canvas.evolve(steps=15)
+    canvas.clear()
+    canvas.generate_field(preset="CURL_FLUID", seed=42, time=frame * 0.05)
+    canvas.render_particles(50)
     
-    print("\033[H\033[J")  # Clear terminal
-    print(canvas.render())
-    time.sleep(0.05)
+    print("\033[H" + canvas.frame())  # ANSI home cursor
+    time.sleep(0.03)
 ```
 
 ### L-System Dragon Curve
@@ -1673,10 +1635,9 @@ from glyphwork import list_presets as list_attractor_presets, get_preset as get_
 from glyphwork import DENSITY_CHARS, BLOCK_CHARS, DOT_CHARS, SIMPLE_CHARS, EXTENDED_CHARS
 
 # Flow Fields
-from glyphwork import FlowFieldCanvas, FlowFieldPreset, PerlinNoise2D
-from glyphwork import flow_field_art, animate_flow_field, render_flow_vectors
-from glyphwork import list_flow_field_presets, get_flow_field_preset
-from glyphwork import PERLIN_CLASSIC, CURL_FLUID, TURBULENT, SPIRAL, RADIAL, CRYSTALLINE, GENTLE, CHAOTIC
+from glyphwork import FlowFieldCanvas, FlowField, SimplexNoise
+from glyphwork import flowfield, list_flowfield_presets
+from glyphwork import FLOWFIELD_PRESETS, DIRECTION_ARROWS
 
 # Box Drawing & Tables
 from glyphwork import box_drawing, table, horizontal_line, vertical_line
