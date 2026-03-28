@@ -109,6 +109,15 @@ from .attractors import (
     attractor_art, render_ascii as render_attractor_ascii,
     DENSITY_CHARS as ATTRACTOR_DENSITY_CHARS, BLOCK_CHARS as ATTRACTOR_BLOCK_CHARS,
 )
+from .flow_field import (
+    FlowFieldCanvas, FlowFieldPreset, PerlinNoise2D, Particle as FlowParticle,
+    PRESETS as FLOW_FIELD_PRESETS, list_presets as list_flow_field_presets,
+    get_preset as get_flow_field_preset,
+    PERLIN_CLASSIC, CURL_FLUID, TURBULENT, SPIRAL, RADIAL, CRYSTALLINE, GENTLE, CHAOTIC,
+    flow_field_art, animate_flow_field, render_flow_vectors,
+    DENSITY_CHARS as FLOW_DENSITY_CHARS, BLOCK_CHARS as FLOW_BLOCK_CHARS,
+    FLOW_CHARS, STREAM_CHARS,
+)
 
 __all__ = [
     "Canvas",
@@ -191,4 +200,10 @@ __all__ = [
     "ATTRACTOR_PRESETS", "list_attractor_presets", "get_attractor_preset",
     "create_attractor", "attractor_art", "render_attractor_ascii",
     "ATTRACTOR_DENSITY_CHARS", "ATTRACTOR_BLOCK_CHARS",
+    # Flow Fields
+    "FlowFieldCanvas", "FlowFieldPreset", "PerlinNoise2D", "FlowParticle",
+    "FLOW_FIELD_PRESETS", "list_flow_field_presets", "get_flow_field_preset",
+    "PERLIN_CLASSIC", "CURL_FLUID", "TURBULENT", "SPIRAL", "RADIAL", "CRYSTALLINE", "GENTLE", "CHAOTIC",
+    "flow_field_art", "animate_flow_field", "render_flow_vectors",
+    "FLOW_DENSITY_CHARS", "FLOW_BLOCK_CHARS", "FLOW_CHARS", "STREAM_CHARS",
 ]
