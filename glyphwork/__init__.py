@@ -100,6 +100,15 @@ from .ifs import (
     render_ascii as render_ifs_ascii, ifs_art,
     DENSITY_CHARS as IFS_DENSITY_CHARS, BLOCK_CHARS as IFS_BLOCK_CHARS,
 )
+from .attractors import (
+    AttractorBase,
+    LorenzAttractor, RosslerAttractor, CliffordAttractor, DeJongAttractor,
+    DensityRenderer,
+    PRESETS as ATTRACTOR_PRESETS, list_presets as list_attractor_presets,
+    get_preset as get_attractor_preset, create_attractor,
+    attractor_art, render_ascii as render_attractor_ascii,
+    DENSITY_CHARS as ATTRACTOR_DENSITY_CHARS, BLOCK_CHARS as ATTRACTOR_BLOCK_CHARS,
+)
 
 __all__ = [
     "Canvas",
@@ -175,4 +184,11 @@ __all__ = [
     "IFS_PRESETS", "list_ifs_presets", "get_ifs_preset",
     "render_ifs_ascii", "ifs_art",
     "IFS_DENSITY_CHARS", "IFS_BLOCK_CHARS",
+    # Strange Attractors
+    "AttractorBase",
+    "LorenzAttractor", "RosslerAttractor", "CliffordAttractor", "DeJongAttractor",
+    "DensityRenderer",
+    "ATTRACTOR_PRESETS", "list_attractor_presets", "get_attractor_preset",
+    "create_attractor", "attractor_art", "render_attractor_ascii",
+    "ATTRACTOR_DENSITY_CHARS", "ATTRACTOR_BLOCK_CHARS",
 ]
