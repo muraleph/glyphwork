@@ -1076,6 +1076,76 @@ print(canvas.field.to_ascii(mode="arrows"))
 
 ---
 
+### 🔶 Voronoi Diagrams
+*Organic tessellation patterns from seed points*
+
+Voronoi diagrams partition a plane into cells based on distance to seed points—each region contains all points closer to its seed than any other. The result is organic, cell-like patterns perfect for stained glass, cracked earth, biological cells, and abstract tessellations.
+
+```python
+from glyphwork import voronoi_art, VoronoiCanvas
+
+# Quick one-liner
+print(voronoi_art(60, 20, num_seeds=20, seed=42))
+
+# Full control with the class
+canvas = VoronoiCanvas(60, 20)
+canvas.generate_seeds(count=25, distribution="poisson", seed=42)
+canvas.render(style="edges")
+print(canvas.frame())
+```
+
+**Render Modes:**
+
+| Style | Description |
+|-------|-------------|
+| `edges` | Draw cell boundaries (default) |
+| `filled` | Fill cells with density-based shading |
+| `distance` | Gradient showing proximity to edges |
+
+```python
+# Different render styles
+print(voronoi_art(50, 15, style="edges", seed=42))     # Cell boundaries
+print(voronoi_art(50, 15, style="filled", seed=42))    # Shaded cells
+print(voronoi_art(50, 15, style="distance", seed=42))  # Distance field
+```
+
+**Seed Distributions:**
+
+| Distribution | Pattern |
+|--------------|---------|
+| `random` | Uniform random placement |
+| `grid` | Regular grid with optional jitter |
+| `hex` | Hexagonal honeycomb pattern |
+| `poisson` | Poisson disk sampling (natural spacing) |
+| `clustered` | Points grouped around cluster centers |
+
+```python
+# Different seed distributions
+canvas = VoronoiCanvas(60, 20)
+canvas.generate_seeds(count=25, distribution="hex", jitter=0.1, seed=42)
+canvas.render_edges()
+print(canvas.frame())
+```
+
+**Presets:**
+
+```python
+from glyphwork import voronoi_art, list_presets
+
+# Use a preset
+print(voronoi_art(50, 15, preset="CRYSTAL", seed=42))   # Honeycomb
+print(voronoi_art(50, 15, preset="CRACKED", seed=42))   # Dried mud
+print(voronoi_art(50, 15, preset="CELLS", seed=42))     # Biological
+
+# See all presets
+print(list_presets())
+# {'ORGANIC': 'Natural cell-like patterns',
+#  'CRYSTAL': 'Crystalline honeycomb structure',
+#  'CRACKED': 'Cracked earth / dried mud pattern', ...}
+```
+
+---
+
 ## Quick Examples
 
 ### Starry Night
@@ -1578,6 +1648,7 @@ rd.animate(steps=2000, frame_skip=10, delay=0.05)
 | `DeJongAttractor` | 2D De Jong attractor with angular patterns |
 | `DensityRenderer` | Trajectory-to-ASCII density mapper |
 | `FlowFieldCanvas` | Noise-based flow fields for fluid-like patterns |
+| `VoronoiCanvas` | Organic cell tessellations from seed points |
 | `LineStyle` | Box drawing character set with 8 presets |
 
 ### Supporting Classes
@@ -1593,6 +1664,8 @@ rd.animate(steps=2000, frame_skip=10, delay=0.05)
 | `ColorAttr` | Color/style attributes for a cell |
 | `FlowFieldPreset` | Flow field configuration preset |
 | `PerlinNoise2D` | 2D Perlin noise generator |
+| `VoronoiDiagram` | Computed Voronoi diagram with cells/edges |
+| `VoronoiCell` | Single Voronoi cell with seed and neighbors |
 
 ### Utility Functions
 
@@ -1638,6 +1711,12 @@ from glyphwork import DENSITY_CHARS, BLOCK_CHARS, DOT_CHARS, SIMPLE_CHARS, EXTEN
 from glyphwork import FlowFieldCanvas, FlowField, SimplexNoise
 from glyphwork import flowfield, list_flowfield_presets
 from glyphwork import FLOWFIELD_PRESETS, DIRECTION_ARROWS
+
+# Voronoi Diagrams
+from glyphwork import VoronoiCanvas, VoronoiDiagram, VoronoiCell
+from glyphwork import voronoi_art, list_presets as list_voronoi_presets, list_distributions
+from glyphwork import generate_random_seeds, generate_grid_seeds, generate_hex_seeds
+from glyphwork import generate_poisson_seeds, generate_clustered_seeds
 
 # Box Drawing & Tables
 from glyphwork import box_drawing, table, horizontal_line, vertical_line
