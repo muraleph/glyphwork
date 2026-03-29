@@ -545,6 +545,139 @@ print(horizontal_line(20, style="heavy", arrows=True))
 
 ---
 
+### 🧊 3D Wireframe Rendering
+*Perspective-projected 3D shapes in braille*
+
+Render 3D wireframe models—cubes, pyramids, spheres, tori, and more—using high-resolution braille characters. Built on top of BrailleCanvas with perspective projection, rotation matrices, and a library of predefined shapes.
+
+```python
+from glyphwork import WireframeCanvas, Wireframe
+
+# Create a canvas and a cube
+canvas = WireframeCanvas(60, 18)
+cube = Wireframe.cube(1.5)
+
+# Rotate and render
+cube.rotation.x = 0.5
+cube.rotation.y = 0.7
+
+canvas.clear()
+canvas.render(cube)
+canvas.print()
+```
+
+**Output:**
+```
+                          ⢀⣀⣀⣀⣠⠤⠔⠒⠒⠒⠢⠤⣄⣀⣀⣀                          
+                   ⢀⣠⠤⠒⠊⠉        ⢀⠔⠊     ⠈⠉⠒⠤⣄⡀                   
+            ⢀⣠⠴⠒⠉              ⢀⠔⠁             ⠉⠒⠲⣄⡀            
+       ⢀⡠⠔⠊⠁                 ⡠⠊                    ⠈⠓⠤⡀       
+     ⡠⠊                    ⢀⠔⠁                         ⠈⠢⡀     
+    ⡰⠁                     ⢀⠎                             ⠈⢆    
+   ⢠⠃                      ⡜                                ⠘⡄   
+   ⡇                       ⢸                                  ⢹   
+   ⡇                       ⢸                                  ⢸   
+   ⢸                       ⡇                                  ⡇   
+    ⢇                     ⢠⠃                                 ⡸    
+    ⠘⡄                    ⢸                                 ⢀⠇    
+     ⠘⢄                  ⢀⠇                                ⡠⠃     
+       ⠈⠢⡀              ⢀⠎                              ⢀⠔⠁       
+          ⠉⠢⣀          ⡜                            ⢀⡠⠊⠁          
+              ⠉⠒⢤⣀   ⢀⠜                          ⣀⠤⠒⠁              
+                  ⠉⠒⢤⠊                       ⢀⡠⠔⠉                  
+                       ⠑⠤⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣠⠤⠔⠊                       
+```
+
+**Features:**
+- **Perspective projection** — True 3D-to-2D with configurable FOV and camera distance
+- **Rotation matrices** — Rotate around X, Y, Z axes or arbitrary axis (Rodrigues' formula)
+- **10 predefined shapes** — Cube, pyramid, sphere, torus, cylinder, cone, and Platonic solids
+- **High resolution** — Braille's 2×4 subpixel grid for smooth curves and diagonals
+- **Composable** — Merge shapes, render multiple objects, animate over time
+
+**Available Shapes:**
+
+| Shape | Method | Description |
+|-------|--------|-------------|
+| `Wireframe.cube(size)` | Box | Unit cube centered at origin |
+| `Wireframe.pyramid(base, height)` | Pyramid | Square-base pyramid |
+| `Wireframe.sphere(radius, lat, lon)` | Sphere | UV sphere with configurable segments |
+| `Wireframe.torus(major, minor)` | Torus | Donut shape |
+| `Wireframe.cylinder(radius, height)` | Cylinder | Vertical cylinder |
+| `Wireframe.cone(radius, height)` | Cone | Cone with circular base |
+| `Wireframe.tetrahedron(size)` | Platonic | 4-face regular solid |
+| `Wireframe.octahedron(size)` | Platonic | 8-face regular solid |
+| `Wireframe.icosahedron(size)` | Platonic | 20-face regular solid |
+| `Wireframe.dodecahedron(size)` | Platonic | 12-face regular solid |
+
+**Animation Example:**
+
+```python
+import math
+import time
+from glyphwork import WireframeCanvas, Wireframe
+
+canvas = WireframeCanvas(60, 18)
+cube = Wireframe.cube(1.5)
+
+for frame in range(200):
+    t = frame * 0.03
+    
+    # Rotate the cube
+    cube.rotation.x = t * 0.5
+    cube.rotation.y = t * 0.7
+    cube.rotation.z = t * 0.3
+    
+    # Render
+    canvas.clear()
+    canvas.render(cube)
+    
+    print("\033[H" + canvas.frame())  # ANSI home cursor
+    time.sleep(0.016)
+```
+
+**Multiple Shapes:**
+
+```python
+from glyphwork import WireframeCanvas, Wireframe, Vec3
+
+canvas = WireframeCanvas(80, 20)
+
+# Create shapes
+cube = Wireframe.cube(0.8)
+torus = Wireframe.torus(0.6, 0.25)
+
+# Position them side by side
+cube.position = Vec3(-1.5, 0, 0)
+torus.position = Vec3(1.5, 0, 0)
+
+# Rotate
+cube.rotation.y = 0.5
+torus.rotation.x = 0.8
+
+# Render both
+canvas.clear()
+canvas.render(cube)
+canvas.render(torus)
+canvas.print()
+```
+
+**Camera Control:**
+
+```python
+canvas = WireframeCanvas(60, 18)
+
+# Adjust camera
+canvas.camera.fov = 45          # Narrower field of view
+canvas.camera.distance = 6.0    # Move camera back
+
+# Render a shape
+shape = Wireframe.icosahedron(1.2)
+canvas.render(shape)
+```
+
+---
+
 ## Generative Patterns
 
 Beyond the six canvases, glyphwork includes powerful generative systems based on mathematical rules. These create complex, beautiful patterns from surprisingly simple algorithms.
@@ -1641,6 +1774,10 @@ rd.animate(steps=2000, frame_skip=10, delay=0.05)
 | `LangtonsAnt` | 2D Turing machine with emergent behavior |
 | `LSystem` | Lindenmayer system fractals and plants |
 | `IFS` | Iterated Function System fractal generator |
+| `WireframeCanvas` | 3D wireframe rendering to braille |
+| `Wireframe` | 3D shape with vertices, edges, rotation |
+| `Camera` | Perspective camera for 3D projection |
+| `Vec3` | 3D vector with math operations |
 | `ASCIIRenderer` | IFS-to-ASCII renderer with density mapping |
 | `LorenzAttractor` | 3D Lorenz butterfly chaotic system |
 | `RosslerAttractor` | 3D Rössler spiral attractor |
@@ -1722,6 +1859,11 @@ from glyphwork import generate_poisson_seeds, generate_clustered_seeds
 from glyphwork import box_drawing, table, horizontal_line, vertical_line
 from glyphwork import LineStyle, get_style, create_style
 from glyphwork import ASCII, UNICODE_LIGHT, UNICODE_HEAVY, DOUBLE, ROUNDED, DASHED, BLOCK, DOT
+
+# 3D Wireframe Rendering
+from glyphwork import WireframeCanvas, Wireframe, Camera, Vec3
+from glyphwork import rotate_x, rotate_y, rotate_z, rotate_axis
+from glyphwork import AnimationState, lerp, smooth_step
 ```
 
 ---
