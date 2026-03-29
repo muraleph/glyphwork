@@ -124,6 +124,28 @@ from .flowfield import (
     DIRECTION_ARROWS,
     LINE_DIRECTION,
 )
+from .voronoi import (
+    # Core classes
+    VoronoiCanvas,
+    VoronoiDiagram,
+    VoronoiCell,
+    # Computation functions
+    compute_voronoi_brute_force,
+    compute_voronoi_fortune,
+    # Seed generators
+    generate_random_seeds,
+    generate_grid_seeds,
+    generate_hex_seeds,
+    generate_poisson_seeds,
+    generate_clustered_seeds,
+    DISTRIBUTIONS as VORONOI_DISTRIBUTIONS,
+    # Convenience functions
+    voronoi_art,
+    list_presets as list_voronoi_presets,
+    list_distributions as list_voronoi_distributions,
+    # Constants
+    PRESETS as VORONOI_PRESETS,
+)
 
 __all__ = [
     "Canvas",
@@ -211,4 +233,12 @@ __all__ = [
     "TracedCurve", "TracedPoint",
     "flowfield", "list_flowfield_presets",
     "FLOWFIELD_PRESETS", "DIRECTION_ARROWS", "LINE_DIRECTION",
+    # Voronoi Diagrams
+    "VoronoiCanvas", "VoronoiDiagram", "VoronoiCell",
+    "compute_voronoi_brute_force", "compute_voronoi_fortune",
+    "generate_random_seeds", "generate_grid_seeds", "generate_hex_seeds",
+    "generate_poisson_seeds", "generate_clustered_seeds",
+    "VORONOI_DISTRIBUTIONS",
+    "voronoi_art", "list_voronoi_presets", "list_voronoi_distributions",
+    "VORONOI_PRESETS",
 ]
