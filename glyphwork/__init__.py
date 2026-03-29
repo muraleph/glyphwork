@@ -146,6 +146,22 @@ from .voronoi import (
     # Constants
     PRESETS as VORONOI_PRESETS,
 )
+from .wireframe import (
+    # Core classes
+    Vec3,
+    Camera,
+    Wireframe,
+    WireframeCanvas,
+    # Rotation helpers
+    rotate_x,
+    rotate_y,
+    rotate_z,
+    rotate_axis,
+    # Animation helpers
+    AnimationState,
+    lerp,
+    smooth_step,
+)
 
 __all__ = [
     "Canvas",
@@ -241,4 +257,8 @@ __all__ = [
     "VORONOI_DISTRIBUTIONS",
     "voronoi_art", "list_voronoi_presets", "list_voronoi_distributions",
     "VORONOI_PRESETS",
+    # 3D Wireframe Rendering
+    "Vec3", "Camera", "Wireframe", "WireframeCanvas",
+    "rotate_x", "rotate_y", "rotate_z", "rotate_axis",
+    "AnimationState", "lerp", "smooth_step",
 ]
